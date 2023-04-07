@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "sunsetutils",
+  "version": "${version}",
+
+  "name": "Sunset Utils",
+  "description": "Library for my mods so I don't have to write the same stuff 5 times and have it conflict.",
+  "authors": [
+    "MartinSVK"
+  ],
+  "contact": {
+    "homepage": "",
+    "sources": ""
+  },
+
+  "license": "MIT",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "sunsetsatellite.sunsetutils.SunsetUtils"
+    ]
+  },
+  "mixins": [
+    "sunsetutils.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.13.3",
+    "minecraft": "1.7.6"
+  },
+  "suggests": {
+  }
+}
