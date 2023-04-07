@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "sunsetutils",
-  "version": "${version}",
+  "version": "1.0.0",
 
   "name": "Sunset Utils",
   "description": "Library for my mods so I don't have to write the same stuff 5 times and have it conflict.",
