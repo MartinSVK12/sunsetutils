@@ -35,11 +35,65 @@ public class NBTEditCommand extends Command {
                     }
                 }
                 if(Objects.equals(args[1],"set")){
-                    if(Objects.equals(args[2],"integer")){
+                    if(args.length > 4){
                         ItemStack stack = commandSender.getPlayer().inventory.getCurrentItem();
-                        int actualValue = Integer.parseInt(args[4]);
-                        stack.tag.setInteger(args[3],actualValue);
-                        return true;
+                        switch (args[2]){
+                            case "integer":
+                                stack.tag.setInteger(args[3],Integer.parseInt(args[4]));
+                                return true;
+                            case "string":
+                                stack.tag.setString(args[3],args[4]);
+                                return true;
+                            case "byte":
+                                stack.tag.setByte(args[3],Byte.parseByte(args[4]));
+                                return true;
+                            case "bool":
+                                stack.tag.setBoolean(args[3],Boolean.parseBoolean(args[4]));
+                                return true;
+                            case "double":
+                                stack.tag.setDouble(args[3],Double.parseDouble(args[4]));
+                                return true;
+                            case "float":
+                                stack.tag.setDouble(args[3],Float.parseFloat(args[4]));
+                                return true;
+                            case "long":
+                                stack.tag.setDouble(args[3],Long.parseLong(args[4]));
+                                return true;
+                            case "short":
+                                stack.tag.setDouble(args[3],Short.parseShort(args[4]));
+                                return true;
+                        }
+                    }
+                }
+                if(Objects.equals(args[1],"get")) {
+                    if (args.length > 2) {
+                        ItemStack stack = commandSender.getPlayer().inventory.getCurrentItem();
+                        switch (args[2]) {
+                            case "integer":
+                                commandSender.sendMessage(String.valueOf(stack.tag.getInteger(args[3])));
+                                return true;
+                            case "string":
+                                commandSender.sendMessage(stack.tag.getString(args[3]));
+                                return true;
+                            case "byte":
+                                commandSender.sendMessage(String.valueOf(stack.tag.getByte(args[3])));
+                                return true;
+                            case "bool":
+                                commandSender.sendMessage(String.valueOf(stack.tag.getBoolean(args[3])));
+                                return true;
+                            case "double":
+                                commandSender.sendMessage(String.valueOf(stack.tag.getDouble(args[3])));
+                                return true;
+                            case "float":
+                                commandSender.sendMessage(String.valueOf(stack.tag.getFloat(args[3])));
+                                return true;
+                            case "long":
+                                commandSender.sendMessage(String.valueOf(stack.tag.getLong(args[3])));
+                                return true;
+                            case "short":
+                                commandSender.sendMessage(String.valueOf(stack.tag.getShort(args[3])));
+                                return true;
+                        }
                     }
                 }
             }
