@@ -16,7 +16,9 @@ public class Config {
     public String modId;
     public Class<?>[] idClasses = null;
     public Map<String,String> props = new HashMap<>();
+    private File configFile;
     public Config(String modId, Map<String,String> props, Class<?>[] idClasses){
+        this.configFile = new File((Minecraft.getMinecraftDir()) + "/config/" + modId + ".cfg");
         this.modId = modId;
         this.idClasses = idClasses;
         this.props = props;
@@ -50,6 +52,7 @@ public class Config {
     }
 
     public Config(String modId, Map<String,String> props){
+        this.configFile = new File((Minecraft.getMinecraftDir()) + "/config/" + modId + ".cfg");
         this.modId = modId;
         this.props = props;
         if (!configFile.exists()) {
@@ -73,6 +76,7 @@ public class Config {
     }
 
     public Config(String modId, Class<?>[] idClasses) {
+        this.configFile = new File((Minecraft.getMinecraftDir()) + "/config/" + modId + ".cfg");
         this.modId = modId;
         this.idClasses = idClasses;
         if (!configFile.exists()) {
@@ -109,7 +113,7 @@ public class Config {
             for (Map.Entry<String, String> entry : props.entrySet()) {
                 String K = entry.getKey();
                 String V = entry.getValue();
-                configWriter.write(K + "=" + V);
+                configWriter.write(System.getProperty("line.separator")+K + "=" + V);
             }
             configWriter.write(System.getProperty("line.separator")+"// Total amount of recorded properties. Changing this will remake the config file.");
             configWriter.write(System.getProperty("line.separator")+"TOTAL_PROPS="+props.size());
@@ -165,7 +169,4 @@ public class Config {
         SunsetUtils.LOGGER.info("("+modId+") "+"No value defined, returning base: "+base);
         return base;
     }
-
-    private final File configFile = new File((Minecraft.getMinecraftDir()) + "/config/" + modId + ".cfg");
-
 }
