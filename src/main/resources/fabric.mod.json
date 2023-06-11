@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "id": "sunsetutils",
-  "version": "1.0.0",
+  "version": "1.2",
 
   "name": "Sunset Utils",
   "icon": "icon.png",
-  "description": "Library for my mods so I don't have to write the same stuff 5 times and have it conflict.",
+  "description": "*slaps library* this bad boy can fit so much common code in it.",
   "authors": [
     "MartinSVK12"
   ],
