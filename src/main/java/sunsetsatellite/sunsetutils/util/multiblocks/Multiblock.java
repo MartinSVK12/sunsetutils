@@ -13,13 +13,13 @@ public class Multiblock extends Structure{
 
     public static final HashMap<String,Multiblock> multiblocks = new HashMap<>();
 
-    public Multiblock(String modId, String translateKey, NBTTagCompound data, boolean includeAir) {
-        super(modId, translateKey, data, includeAir, false);
+    public Multiblock(String modId, Class<?>[] modClasses, String translateKey, NBTTagCompound data, boolean includeAir) {
+        super(modId, modClasses, translateKey, data, includeAir, false);
         this.translateKey = "multiblock."+modId+"."+translateKey+".name";
     }
 
-    public Multiblock(String modId, String translateKey, String filePath, boolean includeAir) {
-        super(modId, translateKey, filePath, includeAir, false);
+    public Multiblock(String modId, Class<?>[] modClasses, String translateKey, String filePath, boolean includeAir) {
+        super(modId, modClasses, translateKey, filePath, includeAir, false);
         this.translateKey = "multiblock."+modId+"."+translateKey+".name";
     }
 
