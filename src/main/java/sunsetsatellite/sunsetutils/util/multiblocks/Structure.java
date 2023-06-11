@@ -20,6 +20,7 @@ import java.util.Objects;
 
 public class Structure {
     public String modId;
+    public Class<?>[] modClasses;
     public String translateKey;
     public String filePath;
     public NBTTagCompound data;
@@ -28,8 +29,9 @@ public class Structure {
 
     public static HashMap<String,Structure> internalStructures = new HashMap<>();
 
-    public Structure(String modId, String translateKey, NBTTagCompound data, boolean placeAir, boolean replaceBlocks){
+    public Structure(String modId, Class<?>[] modClasses, String translateKey, NBTTagCompound data, boolean placeAir, boolean replaceBlocks){
         this.modId = modId;
+        this.modClasses = modClasses;
         this.translateKey = "structure."+modId+"."+translateKey+".name";
         this.data = data;
         this.filePath = null;
@@ -37,8 +39,9 @@ public class Structure {
         this.replaceBlocks = replaceBlocks;
     }
 
-    public Structure(String modId, String translateKey, String filePath, boolean placeAir, boolean replaceBlocks){
+    public Structure(String modId, Class<?>[] modClasses, String translateKey, String filePath, boolean placeAir, boolean replaceBlocks){
         this.modId = modId;
+        this.modClasses = modClasses;
         this.translateKey = "structure."+modId+"."+translateKey+".name";
         this.placeAir = placeAir;
         this.replaceBlocks = replaceBlocks;
@@ -81,6 +84,8 @@ public class Structure {
             int n = 0;
             NBTTagCompound data = new NBTTagCompound();
             NBTTagCompound struct = new NBTTagCompound();
+            Structure structure = new Structure(SunsetUtils.MOD_ID,new Class<?>[]{},filePath,struct,placeAir,replaceBlocks);
+            structure.filePath = filePath;
             for (int x = origin.x-size.x; x <= origin.x+size.x; x++) {
                 for (int y = origin.y-size.y; y <= origin.y+size.y; y++) {
                     for (int z = origin.z-size.z; z <= origin.z+size.z; z++) {
@@ -89,7 +94,7 @@ public class Structure {
                             block.setInteger("x",x-origin.x);
                             block.setInteger("y",y-origin.y);
                             block.setInteger("z",z-origin.z);
-                            String s = getBlockFieldName(Block.getBlock(world.getBlockId(x,y,z)));
+                            String s = structure.getBlockFieldName(Block.getBlock(world.getBlockId(x,y,z)));
                             if(!s.contains("Block.")){
                                 s = s.replace(".",":");
                                 block.setString("id",s);
@@ -105,8 +110,6 @@ public class Structure {
             }
             struct.setCompoundTag("Data",data);
             SunsetUtils.LOGGER.info(n+" blocks saved.");
-            Structure structure = new Structure(SunsetUtils.MOD_ID,filePath,struct,placeAir,replaceBlocks);
-            structure.filePath = filePath;
             return structure;
         } else {
             SunsetUtils.LOGGER.error("Invalid parameters!");
@@ -117,6 +120,8 @@ public class Structure {
     public static Structure saveStructure(World world, Vec3i pos1, Vec3i pos2, String filePath, boolean placeAir, boolean replaceBlocks){
         NBTTagCompound struct = new NBTTagCompound();
         NBTTagCompound data = new NBTTagCompound();
+        Structure structure = new Structure(SunsetUtils.MOD_ID,new Class<?>[]{},filePath,struct,placeAir,replaceBlocks);
+        structure.filePath = filePath;
         Vec3i diff = new Vec3i(pos1.x-pos2.x,pos1.y-pos2.y,pos1.z-pos2.z);
         int n = 0;
         SunsetUtils.LOGGER.info(diff.toString());
@@ -147,8 +152,10 @@ public class Structure {
                         block.setInteger("x",i);
                         block.setInteger("y",j);
                         block.setInteger("z",k);
-                        String s = getBlockFieldName(Block.getBlock(world.getBlockId(x,y,z)));
-                        if(!s.contains("Block.")){
+                        String s = structure.getBlockFieldName(Block.getBlock(world.getBlockId(x,y,z)));
+                        if(s.isEmpty()){
+                            block.setInteger("id",world.getBlockId(x,y,z));
+                        } else if(!s.contains("Block.")){
                             s = s.replace(".",":");
                             block.setString("id",s);
                         } else {
@@ -163,8 +170,6 @@ public class Structure {
         }
         struct.setCompoundTag("Data",data);
         SunsetUtils.LOGGER.info(n+" blocks saved.");
-        Structure structure = new Structure(SunsetUtils.MOD_ID,filePath,struct,placeAir,replaceBlocks);
-        structure.filePath = filePath;
         return structure;
     }
 
@@ -224,7 +229,6 @@ public class Structure {
             return ((NBTTagInt) nbt).intValue;
         } else if (nbt instanceof NBTTagString) {
             String[] args = ((NBTTagString) nbt).stringValue.split(":");
-
             try {
                 Class<?> clazz = Class.forName(args[0]);
                 Field field = clazz.getDeclaredField(args[1]);
@@ -273,10 +277,9 @@ public class Structure {
         }
     }
 
-    public static String getBlockFieldName(Block item){
+    public String getBlockFieldName(Block item){
         try{
             ArrayList<Field> fields = new ArrayList<>(Arrays.asList(Block.class.getDeclaredFields()));
-            //fields.addAll(Arrays.asList(mod_RetroStorage.class.getDeclaredFields()));
             for (Field field : fields) {
                 if(field.getType().isAssignableFrom(Block.class) && Modifier.isStatic(field.getModifiers())){
                     field.setAccessible(true);
@@ -286,13 +289,15 @@ public class Structure {
                     }
                 }
             }
-            fields = new ArrayList<>(Arrays.asList(SunsetUtils.class.getDeclaredFields()));
-            for (Field field : fields) {
-                if(field.getType().isAssignableFrom(Block.class) && Modifier.isStatic(field.getModifiers())){
-                    field.setAccessible(true);
-                    Block fieldItem = (Block) field.get(null);
-                    if(fieldItem.equals(item)){
-                        return "SunsetUtils."+field.getName();
+            for (Class<?> aClass : modClasses) {
+                fields = new ArrayList<>(Arrays.asList(aClass.getDeclaredFields()));
+                for (Field field : fields) {
+                    if (field.getType().isAssignableFrom(Block.class) && Modifier.isStatic(field.getModifiers())) {
+                        field.setAccessible(true);
+                        Block fieldItem = (Block) field.get(null);
+                        if (fieldItem.equals(item)) {
+                            return aClass.getName()+"." + field.getName();
+                        }
                     }
                 }
             }
