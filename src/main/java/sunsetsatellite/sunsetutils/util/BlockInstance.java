@@ -11,6 +11,7 @@ public class BlockInstance {
     public Block block;
     @NotNull
     public Vec3i pos;
+    public int meta = 0;
     public TileEntity tile;
 
     public BlockInstance(@NotNull Block block, @NotNull Vec3i pos, TileEntity tile){
@@ -19,11 +20,19 @@ public class BlockInstance {
         this.tile = tile;
     }
 
+    public BlockInstance(@NotNull Block block, @NotNull Vec3i pos, int meta, TileEntity tile){
+        this.block = block;
+        this.pos = pos;
+        this.tile = tile;
+        this.meta = meta;
+    }
+
     @Override
     public String toString() {
         return "BlockInstance{" +
-                "block=" + block.blockID +
+                "block=" + block +
                 ", pos=" + pos +
+                ", meta=" + meta +
                 ", tile=" + tile +
                 '}';
     }
@@ -35,6 +44,7 @@ public class BlockInstance {
 
         BlockInstance that = (BlockInstance) o;
 
+        if (meta != that.meta) return false;
         if (!block.equals(that.block)) return false;
         if (!pos.equals(that.pos)) return false;
         return Objects.equals(tile, that.tile);
@@ -44,6 +54,7 @@ public class BlockInstance {
     public int hashCode() {
         int result = block.hashCode();
         result = 31 * result + pos.hashCode();
+        result = 31 * result + meta;
         result = 31 * result + (tile != null ? tile.hashCode() : 0);
         return result;
     }

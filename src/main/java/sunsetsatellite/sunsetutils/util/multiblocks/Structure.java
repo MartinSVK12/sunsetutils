@@ -3,16 +3,15 @@ package sunsetsatellite.sunsetutils.util.multiblocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.*;
 import sunsetsatellite.sunsetutils.SunsetUtils;
+import sunsetsatellite.sunsetutils.util.BlockInstance;
 import sunsetsatellite.sunsetutils.util.Direction;
 import sunsetsatellite.sunsetutils.util.Vec3i;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -115,6 +114,35 @@ public class Structure {
             SunsetUtils.LOGGER.error("Invalid parameters!");
             return null;
         }
+    }
+
+    public static Structure saveStructure(World world, ArrayList<BlockInstance> blocks, String filePath, boolean placeAir, boolean replaceBlocks){
+        NBTTagCompound struct = new NBTTagCompound();
+        NBTTagCompound data = new NBTTagCompound();
+        Structure structure = new Structure(SunsetUtils.MOD_ID,new Class<?>[]{},filePath,struct,placeAir,replaceBlocks);
+        structure.filePath = filePath;
+        int n = 0;
+        for (BlockInstance blockInstance : blocks) {
+            NBTTagCompound block = new NBTTagCompound();
+            block.setInteger("x",blockInstance.pos.x);
+            block.setInteger("y",blockInstance.pos.y);
+            block.setInteger("z",blockInstance.pos.z);
+            String s = structure.getBlockFieldName(blockInstance.block);
+            if(s.isEmpty()){
+                block.setInteger("id",blockInstance.block.blockID);
+            } else if(!s.contains("Block.")){
+                s = s.replace(".",":");
+                block.setString("id",s);
+            } else {
+                block.setInteger("id",blockInstance.block.blockID);
+            }
+            block.setInteger("meta",blockInstance.meta);
+            data.setCompoundTag(String.valueOf(n),block);
+            n++;
+        }
+        struct.setCompoundTag("Data",data);
+        SunsetUtils.LOGGER.info(n+" blocks saved.");
+        return structure;
     }
 
     public static Structure saveStructure(World world, Vec3i pos1, Vec3i pos2, String filePath, boolean placeAir, boolean replaceBlocks){
@@ -244,19 +272,17 @@ public class Structure {
     }
     
     protected void loadFromNBT(String name) {
-        try {
-            File file;
-            file = new File(Objects.requireNonNull(this.getClass().getResource("/assets/"+modId+"/structures/"+name+".nbt")).toURI());
-            FileInputStream fileinputstream = new FileInputStream(file);
-            this.data = CompressedStreamTools.func_1138_a(fileinputstream);
-            SunsetUtils.LOGGER.info(String.format("Structure '%s' contains %d blocks.",name,this.data.getCompoundTag("Data").func_28110_c().size()));
-        } catch (IOException | URISyntaxException e){
+        try (InputStream resource = this.getClass().getResourceAsStream("/assets/" + modId + "/structures/" + name + ".nbt")) {
+            if (resource != null) {
+                this.data = CompressedStreamTools.func_1138_a(resource);
+                SunsetUtils.LOGGER.info(String.format("Structure '%s' contains %d blocks.",name,this.data.getCompoundTag("Data").func_28110_c().size()));
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
-    protected void saveToNBT(){
+    protected boolean saveToNBT(){
         File file;
         String s = String.format("%s\\%s.nbt", Minecraft.getMinecraftDir(), this.filePath);
         file = new File(s);
@@ -272,8 +298,10 @@ public class Structure {
                     SunsetUtils.LOGGER.info(String.format("Structure '%s' saved to %s",this.filePath,s));
                 }
             }
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
     }
 
