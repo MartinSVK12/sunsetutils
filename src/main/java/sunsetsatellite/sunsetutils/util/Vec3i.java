@@ -59,6 +59,34 @@ public class Vec3i {
         return this;
     }
 
+    public Vec3i add(Vec3i value){
+        this.x += value.x;
+        this.y += value.y;
+        this.z += value.z;
+        return this;
+    }
+
+    public Vec3i subtract(Vec3i value){
+        this.x -= value.x;
+        this.y -= value.y;
+        this.z -= value.z;
+        return this;
+    }
+
+    public Vec3i divide(Vec3i value){
+        this.x /= value.x;
+        this.y /= value.y;
+        this.z /= value.z;
+        return this;
+    }
+
+    public Vec3i multiply(Vec3i value){
+        this.x *= value.x;
+        this.y *= value.y;
+        this.z *= value.z;
+        return this;
+    }
+
     public void writeToNBT(NBTTagCompound tag){
         tag.setInteger("x",this.x);
         tag.setInteger("y",this.y);
@@ -69,6 +97,10 @@ public class Vec3i {
         this.x = tag.getInteger("x");
         this.y = tag.getInteger("y");
         this.z = tag.getInteger("z");
+    }
+
+    public Vec3i copy(){
+        return new Vec3i(this.x,this.y,this.z);
     }
 
     @Override

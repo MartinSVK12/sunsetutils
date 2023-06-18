@@ -9,6 +9,8 @@ import sunsetsatellite.sunsetutils.util.Vec3i;
 
 import java.util.HashMap;
 
+//TODO: Fix multiblock rotation
+
 public class Multiblock extends Structure{
 
     public static final HashMap<String,Multiblock> multiblocks = new HashMap<>();

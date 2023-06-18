@@ -53,6 +53,34 @@ public class Vec3f {
         return this;
     }
 
+    public Vec3f add(Vec3f value){
+        this.x += value.x;
+        this.y += value.y;
+        this.z += value.z;
+        return this;
+    }
+
+    public Vec3f subtract(Vec3f value){
+        this.x -= value.x;
+        this.y -= value.y;
+        this.z -= value.z;
+        return this;
+    }
+
+    public Vec3f divide(Vec3f value){
+        this.x /= value.x;
+        this.y /= value.y;
+        this.z /= value.z;
+        return this;
+    }
+
+    public Vec3f multiply(Vec3f value){
+        this.x *= value.x;
+        this.y *= value.y;
+        this.z *= value.z;
+        return this;
+    }
+
     public void writeToNBT(NBTTagCompound tag){
         tag.setDouble("x",this.x);
         tag.setDouble("y",this.y);
@@ -65,6 +93,9 @@ public class Vec3f {
         this.z = tag.getDouble("z");
     }
 
+    public Vec3f copy(){
+        return new Vec3f(this.x,this.y,this.z);
+    }
 
 
     @Override

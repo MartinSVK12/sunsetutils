@@ -2,7 +2,10 @@ package sunsetsatellite.sunsetutils.util.multiblocks;
 
 import net.minecraft.src.*;
 import org.lwjgl.opengl.GL11;
+import sunsetsatellite.sunsetutils.SunsetUtils;
+import sunsetsatellite.sunsetutils.util.Direction;
 import sunsetsatellite.sunsetutils.util.RenderBlockSimple;
+import sunsetsatellite.sunsetutils.util.Vec3i;
 
 import java.util.Collection;
 
@@ -12,19 +15,34 @@ public class RenderMultiblock extends TileEntitySpecialRenderer {
         int i = tileEntity.xCoord;
         int j = tileEntity.yCoord;
         int k = tileEntity.zCoord;
+        Direction dir = Direction.getDirectionFromSide(tileEntity.getBlockMetadata());
         World world = this.tileEntityRenderer.renderEngine.minecraft.theWorld;
         if(tileEntity instanceof IMultiblock){
             Collection blocks = ((IMultiblock) tileEntity).getMultiblock().data.getCompoundTag("Data").func_28110_c();
             Collection subs = ((IMultiblock) tileEntity).getMultiblock().data.getCompoundTag("Substitutions").func_28110_c();
-
             for (Object block : blocks) {
+                Vec3i pos;
                 int x = ((NBTTagCompound) block).getInteger("x");
                 int y = ((NBTTagCompound) block).getInteger("y");
                 int z = ((NBTTagCompound) block).getInteger("z");
+                switch (dir){
+                    case X_POS:
+                        pos = new Vec3i(z + i, y + j, x + k);
+                        break;
+                    case X_NEG:
+                        pos = new Vec3i(-z + i, y + j, -x + k);
+                        break;
+                    case Z_NEG:
+                        pos = new Vec3i(-x + i, y + j, -z + k);
+                        break;
+                    default:
+                        pos = new Vec3i(x + i, y + j, z + k);
+                        break;
+                }
                 int id = Structure.getBlockId((NBTTagCompound) block);
                 int meta = ((NBTTagCompound) block).getInteger("meta");
                 if((Structure.getBlockId((NBTTagCompound) block) != tileEntity.getBlockType().blockID)){
-                    if(world.getBlockId(i+x,j+y,k+z) != id || (world.getBlockId(i+x,j+y,k+z) == id && world.getBlockMetadata(i+x,j+y,k+z) != meta)){
+                    if(world.getBlockId(pos.x,pos.y,pos.z) != id || (world.getBlockId(pos.x,pos.y,pos.z) == id && world.getBlockMetadata(pos.x,pos.y,pos.z) != meta)){
                         boolean foundSub = false;
                         for (Object sub : subs) {
                             int subX = ((NBTTagCompound) sub).getInteger("x");
@@ -33,7 +51,7 @@ public class RenderMultiblock extends TileEntitySpecialRenderer {
                             int subId = Structure.getBlockId((NBTTagCompound) sub);
                             int subMeta = ((NBTTagCompound) sub).getInteger("meta");
                             if(subX == x && subY == y && subZ == z){
-                                if(world.getBlockId(i+x,j+y,k+z) == subId && world.getBlockMetadata(i+x,j+y,k+z) == subMeta){
+                                if(world.getBlockId(pos.x,pos.y,pos.z) == subId && world.getBlockMetadata(pos.x,pos.y,pos.z) == subMeta){
                                     foundSub = true;
                                 }
                             }
@@ -42,7 +60,7 @@ public class RenderMultiblock extends TileEntitySpecialRenderer {
                             GL11.glPushMatrix();
                             GL11.glDisable(GL11.GL_LIGHTING);
                             GL11.glColor4f(1f,0,0,1.0f);
-                            GL11.glTranslatef((float)d+x, (float)e+y, (float)f+z);
+                            GL11.glTranslatef((float)d+(pos.x-i), (float)e+(pos.y-j), (float)f+(pos.z-k));
                             drawBlock(this.getFontRenderer(),
                                     this.tileEntityRenderer.renderEngine,
                                     id,
