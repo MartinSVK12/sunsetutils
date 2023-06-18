@@ -65,8 +65,6 @@ public class Multiblock extends Structure{
                 if(!foundSub){
                     SunsetUtils.LOGGER.error(String.format("Failed on %d %d %d (%d:%d)",pos.x,pos.y,pos.z,id,meta));
                     return false;
-                } else {
-                    return true;
                 }
             }
         }
