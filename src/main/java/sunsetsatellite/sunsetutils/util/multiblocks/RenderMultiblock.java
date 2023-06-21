@@ -25,20 +25,7 @@ public class RenderMultiblock extends TileEntitySpecialRenderer {
                 int x = ((NBTTagCompound) block).getInteger("x");
                 int y = ((NBTTagCompound) block).getInteger("y");
                 int z = ((NBTTagCompound) block).getInteger("z");
-                switch (dir){
-                    case X_POS:
-                        pos = new Vec3i(z + i, y + j, x + k);
-                        break;
-                    case X_NEG:
-                        pos = new Vec3i(-z + i, y + j, -x + k);
-                        break;
-                    case Z_NEG:
-                        pos = new Vec3i(-x + i, y + j, -z + k);
-                        break;
-                    default:
-                        pos = new Vec3i(x + i, y + j, z + k);
-                        break;
-                }
+                pos = new Vec3i(x,y,z).rotate(new Vec3i(i,j,k),dir);
                 int id = Structure.getBlockId((NBTTagCompound) block);
                 int meta = ((NBTTagCompound) block).getInteger("meta");
                 if((Structure.getBlockId((NBTTagCompound) block) != tileEntity.getBlockType().blockID)){

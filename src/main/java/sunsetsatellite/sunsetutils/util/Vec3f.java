@@ -14,6 +14,14 @@ public class Vec3f {
         this.z = z;
     };
 
+    public Vec3f(){
+        this.x = this.y = this.z = 0;
+    }
+
+    public Vec3f(double size){
+        this.x = this.y = this.z = size;
+    }
+
     public Vec3f(NBTTagCompound tag){
         readFromNBT(tag);
     }
@@ -95,6 +103,50 @@ public class Vec3f {
 
     public Vec3f copy(){
         return new Vec3f(this.x,this.y,this.z);
+    }
+
+    public Vec3f rotate(Vec3f origin, Direction direction){
+        Vec3f pos;
+        switch (direction){
+            case X_POS:
+                pos = new Vec3f(this.z + origin.x, this.y + origin.y, this.x + origin.z);
+                break;
+            case X_NEG:
+                pos = new Vec3f(-this.z + origin.x, this.y + origin.y, -this.x + origin.z);
+                break;
+            case Z_NEG:
+                pos = new Vec3f(-this.x + origin.x, this.y + origin.y, -this.z + origin.z);
+                break;
+            case Y_NEG:
+                pos = new Vec3f(this.x + origin.x, -this.y + origin.y, this.z + origin.z);
+                break;
+            default:
+                pos = new Vec3f(this.x + origin.x, this.y + origin.y, this.z + origin.z);
+                break;
+        }
+        return pos;
+    }
+
+    public Vec3f rotate(Direction direction){
+        Vec3f pos;
+        switch (direction){
+            case X_POS:
+                pos = new Vec3f(this.z, this.y, this.x);
+                break;
+            case X_NEG:
+                pos = new Vec3f(-this.z, this.y, -this.x);
+                break;
+            case Z_NEG:
+                pos = new Vec3f(-this.x, this.y, -this.z);
+                break;
+            case Y_NEG:
+                pos = new Vec3f(this.x, -this.y, this.z);
+                break;
+            default:
+                pos = new Vec3f(this.x, this.y, this.z);
+                break;
+        }
+        return pos;
     }
 
 

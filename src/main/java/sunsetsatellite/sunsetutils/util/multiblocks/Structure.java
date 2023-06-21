@@ -207,20 +207,12 @@ public class Structure {
             Vec3i pos;
             NBTTagCompound block = (NBTTagCompound) o;
             Direction dir = Direction.getFromName(direction);
-            switch (dir){
-                case X_POS:
-                    pos = new Vec3i(block.getInteger("z") + originX, block.getInteger("y") + originY, block.getInteger("x") + originZ);
-                    break;
-                case X_NEG:
-                    pos = new Vec3i(-block.getInteger("z") + originX, block.getInteger("y") + originY, -block.getInteger("x") + originZ);
-                    break;
-                case Z_NEG:
-                    pos = new Vec3i(-block.getInteger("x") + originX, block.getInteger("y") + originY, -block.getInteger("z") + originZ);
-                    break;
-                default:
-                    pos = new Vec3i(block.getInteger("x") + originX, block.getInteger("y") + originY, block.getInteger("z") + originZ);
-                    break;
+            if (dir != null) {
+                pos = new Vec3i(block.getInteger("x"),block.getInteger("y"),block.getInteger("z")).rotate(new Vec3i(originX,originY,originZ),dir);
+            } else {
+                return false;
             }
+            
             if (!replaceBlocks && world.getBlockId(pos.x, pos.y, pos.z) != 0) {
                 return false;
             }
@@ -229,20 +221,12 @@ public class Structure {
             Vec3i pos;
             Direction dir = Direction.getFromName(direction);
             NBTTagCompound block = (NBTTagCompound) o;
-            switch (dir){
-                case X_POS:
-                    pos = new Vec3i(block.getInteger("z") + originX, block.getInteger("y") + originY, block.getInteger("x") + originZ);
-                    break;
-                case X_NEG:
-                    pos = new Vec3i(-block.getInteger("z") + originX, block.getInteger("y") + originY, -block.getInteger("x") + originZ);
-                    break;
-                case Z_NEG:
-                    pos = new Vec3i(-block.getInteger("x") + originX, block.getInteger("y") + originY, -block.getInteger("z") + originZ);
-                    break;
-                default:
-                    pos = new Vec3i(block.getInteger("x") + originX, block.getInteger("y") + originY, block.getInteger("z") + originZ);
-                    break;
+            if (dir != null) {
+                pos = new Vec3i(block.getInteger("x"),block.getInteger("y"),block.getInteger("z")).rotate(new Vec3i(originX,originY,originZ),dir);
+            } else {
+                return false;
             }
+            
             int id = getBlockId(block);
             if(id != 0 || placeAir){
                 world.setBlockAndMetadataWithNotify(pos.x, pos.y, pos.z, id, block.getInteger("meta"));
