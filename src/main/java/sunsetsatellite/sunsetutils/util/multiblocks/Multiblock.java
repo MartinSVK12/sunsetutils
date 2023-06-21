@@ -9,8 +9,6 @@ import sunsetsatellite.sunsetutils.util.Vec3i;
 
 import java.util.HashMap;
 
-//TODO: Fix multiblock rotation
-
 public class Multiblock extends Structure{
 
     public static final HashMap<String,Multiblock> multiblocks = new HashMap<>();
@@ -34,20 +32,7 @@ public class Multiblock extends Structure{
             int x = block.getInteger("x");
             int y = block.getInteger("y");
             int z = block.getInteger("z");
-            switch (dir){
-                case X_POS:
-                    pos = new Vec3i(block.getInteger("z") + origin.pos.x, block.getInteger("y") + origin.pos.y, block.getInteger("x") + origin.pos.z);
-                    break;
-                case X_NEG:
-                    pos = new Vec3i(-block.getInteger("z") + origin.pos.x, block.getInteger("y") + origin.pos.y, -block.getInteger("x") + origin.pos.z);
-                    break;
-                case Z_NEG:
-                    pos = new Vec3i(-block.getInteger("x") + origin.pos.x, block.getInteger("y") + origin.pos.y, -block.getInteger("z") + origin.pos.z);
-                    break;
-                default:
-                    pos = new Vec3i(block.getInteger("x") + origin.pos.x, block.getInteger("y") + origin.pos.y, block.getInteger("z") + origin.pos.z);
-                    break;
-            }
+            pos = new Vec3i(x,y,z).rotate(origin.pos,dir);
             if (world.getBlockId(pos.x, pos.y, pos.z) != id || (world.getBlockId(pos.x, pos.y, pos.z) == id && world.getBlockMetadata(pos.x, pos.y, pos.z) != meta && !pos.equals(origin.pos))) {
                 boolean foundSub = false;
                 for (Object sub : data.getCompoundTag("Substitutions").func_28110_c()) {

@@ -14,6 +14,14 @@ public class Vec3i {
         this.z = z;
     };
 
+    public Vec3i(){
+        this.x = this.y = this.z = 0;
+    }
+
+    public Vec3i(int size){
+        this.x = this.y = this.z = size;
+    }
+
 
     @Override
     public String toString() {
@@ -85,6 +93,50 @@ public class Vec3i {
         this.y *= value.y;
         this.z *= value.z;
         return this;
+    }
+
+    public Vec3i rotate(Vec3i origin, Direction direction){
+        Vec3i pos;
+        switch (direction){
+            case X_POS:
+                pos = new Vec3i(this.z + origin.x, this.y + origin.y, this.x + origin.z);
+                break;
+            case X_NEG:
+                pos = new Vec3i(-this.z + origin.x, this.y + origin.y, -this.x + origin.z);
+                break;
+            case Z_NEG:
+                pos = new Vec3i(-this.x + origin.x, this.y + origin.y, -this.z + origin.z);
+                break;
+            case Y_NEG:
+                pos = new Vec3i(this.x + origin.x, -this.y + origin.y, this.z + origin.z);
+                break;
+            default:
+                pos = new Vec3i(this.x + origin.x, this.y + origin.y, this.z + origin.z);
+                break;
+        }
+        return pos;
+    }
+
+    public Vec3i rotate(Direction direction){
+        Vec3i pos;
+        switch (direction){
+            case X_POS:
+                pos = new Vec3i(this.z, this.y, this.x);
+                break;
+            case X_NEG:
+                pos = new Vec3i(-this.z, this.y, -this.x);
+                break;
+            case Z_NEG:
+                pos = new Vec3i(-this.x, this.y, -this.z);
+                break;
+            case Y_NEG:
+                pos = new Vec3i(this.x, -this.y, this.z);
+                break;
+            default:
+                pos = new Vec3i(this.x, this.y, this.z);
+                break;
+        }
+        return pos;
     }
 
     public void writeToNBT(NBTTagCompound tag){
