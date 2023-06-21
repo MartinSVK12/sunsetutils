@@ -33,7 +33,7 @@ public class Multiblock extends Structure{
             int y = block.getInteger("y");
             int z = block.getInteger("z");
             pos = new Vec3i(x,y,z).rotate(origin.pos,dir);
-            if (world.getBlockId(pos.x, pos.y, pos.z) != id || (world.getBlockId(pos.x, pos.y, pos.z) == id && world.getBlockMetadata(pos.x, pos.y, pos.z) != meta && !pos.equals(origin.pos))) {
+            if (world.getBlockId(pos.x, pos.y, pos.z) != id || (world.getBlockId(pos.x, pos.y, pos.z) == id && world.getBlockMetadata(pos.x, pos.y, pos.z) != meta && !pos.equals(origin.pos) && meta != -1)) {
                 boolean foundSub = false;
                 for (Object sub : data.getCompoundTag("Substitutions").func_28110_c()) {
                     int subX = ((NBTTagCompound) sub).getInteger("x");
@@ -42,7 +42,7 @@ public class Multiblock extends Structure{
                     int subId = Structure.getBlockId((NBTTagCompound) sub);
                     int subMeta = ((NBTTagCompound) sub).getInteger("meta");
                     if(subX == x && subY == y && subZ == z){
-                        if(world.getBlockId(pos.x,pos.y,pos.z) == subId && world.getBlockMetadata(pos.x,pos.y, pos.z) == subMeta){
+                        if(world.getBlockId(pos.x,pos.y,pos.z) == subId && (world.getBlockMetadata(pos.x,pos.y, pos.z) == subMeta || subMeta == -1)){
                             foundSub = true;
                         }
                     }

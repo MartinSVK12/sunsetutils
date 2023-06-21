@@ -29,7 +29,7 @@ public class RenderMultiblock extends TileEntitySpecialRenderer {
                 int id = Structure.getBlockId((NBTTagCompound) block);
                 int meta = ((NBTTagCompound) block).getInteger("meta");
                 if((Structure.getBlockId((NBTTagCompound) block) != tileEntity.getBlockType().blockID)){
-                    if(world.getBlockId(pos.x,pos.y,pos.z) != id || (world.getBlockId(pos.x,pos.y,pos.z) == id && world.getBlockMetadata(pos.x,pos.y,pos.z) != meta)){
+                    if(world.getBlockId(pos.x,pos.y,pos.z) != id || (world.getBlockId(pos.x,pos.y,pos.z) == id && world.getBlockMetadata(pos.x,pos.y,pos.z) != meta && meta != -1)){
                         boolean foundSub = false;
                         for (Object sub : subs) {
                             int subX = ((NBTTagCompound) sub).getInteger("x");
@@ -38,7 +38,7 @@ public class RenderMultiblock extends TileEntitySpecialRenderer {
                             int subId = Structure.getBlockId((NBTTagCompound) sub);
                             int subMeta = ((NBTTagCompound) sub).getInteger("meta");
                             if(subX == x && subY == y && subZ == z){
-                                if(world.getBlockId(pos.x,pos.y,pos.z) == subId && world.getBlockMetadata(pos.x,pos.y,pos.z) == subMeta){
+                                if(world.getBlockId(pos.x,pos.y,pos.z) == subId && (world.getBlockMetadata(pos.x,pos.y,pos.z) == subMeta || meta == -1)){
                                     foundSub = true;
                                 }
                             }
