@@ -39,6 +39,21 @@ public class Multiblock extends Structure{
                     BlockInstance blockInstance = new BlockInstance(Block.blocksList[world.getBlockId(pos.x,pos.y,pos.z)],pos,world.getBlockMetadata(pos.x, pos.y, pos.z),world.getBlockTileEntity(pos.x, pos.y, pos.z));
                     tiles.add(blockInstance);
                 }
+            } else {
+                for (Object sub : data.getCompoundTag("Substitutions").func_28110_c()) {
+                    int subX = ((NBTTagCompound) sub).getInteger("x");
+                    int subY = ((NBTTagCompound) sub).getInteger("y");
+                    int subZ = ((NBTTagCompound) sub).getInteger("z");
+                    if(subX == x && subY == y && subZ == z){
+                        boolean isSubTile = ((NBTTagCompound) sub).getBoolean("tile");
+                        if(isSubTile){
+                            if(world.getBlockTileEntity(pos.x,pos.y,pos.z) != null){
+                                BlockInstance blockInstance = new BlockInstance(Block.blocksList[world.getBlockId(pos.x,pos.y,pos.z)],pos,world.getBlockMetadata(pos.x, pos.y, pos.z),world.getBlockTileEntity(pos.x, pos.y, pos.z));
+                                tiles.add(blockInstance);
+                            }
+                        }
+                    }
+                }
             }
         }
         return tiles;
