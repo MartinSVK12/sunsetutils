@@ -108,9 +108,7 @@ public class Config {
 
     private void writeConfig(){
         try {
-            if(!configFile.mkdirs()){
-                SunsetUtils.LOGGER.error("Failed to create config for "+modId+"!");
-            }
+            new File(Minecraft.getMinecraftDir() + "/config").mkdirs();
             BufferedWriter configWriter = new BufferedWriter(new FileWriter(configFile));
             configWriter.write("//"+modId+" configuration file. If a property is null or invalid a default value will be used. Configure options here:");
             for (Map.Entry<String, String> entry : props.entrySet()) {
