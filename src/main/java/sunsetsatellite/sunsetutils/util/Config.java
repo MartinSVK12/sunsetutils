@@ -16,7 +16,7 @@ public class Config {
     public String modId;
     public Class<?>[] idClasses = null;
     public Map<String,String> props = new HashMap<>();
-    private File configFile;
+    private final File configFile;
     public Config(String modId, Map<String,String> props, Class<?>[] idClasses){
         this.configFile = new File((Minecraft.getMinecraftDir()) + "/config/" + modId + ".cfg");
         this.modId = modId;
@@ -108,6 +108,9 @@ public class Config {
 
     private void writeConfig(){
         try {
+            if(!configFile.mkdirs()){
+                SunsetUtils.LOGGER.error("Failed to create config for "+modId+"!");
+            }
             BufferedWriter configWriter = new BufferedWriter(new FileWriter(configFile));
             configWriter.write("//"+modId+" configuration file. If a property is null or invalid a default value will be used. Configure options here:");
             for (Map.Entry<String, String> entry : props.entrySet()) {
@@ -133,7 +136,7 @@ public class Config {
             }
             configWriter.close();
         } catch (Exception e){
-            System.err.println("Failed to create config for "+modId+"!");
+            SunsetUtils.LOGGER.error("Failed to create config for "+modId+"!");
             e.printStackTrace();
         }
     }
