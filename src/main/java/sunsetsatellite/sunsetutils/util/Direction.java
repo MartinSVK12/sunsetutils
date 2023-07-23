@@ -28,6 +28,11 @@ public enum Direction {
         return world.getBlockTileEntity(pos.x,pos.y,pos.z);
     }
 
+    public TileEntity getTileEntity(IBlockAccess world, Vec3i baseVec){
+        Vec3i pos = new Vec3i(baseVec.x + vec.x, baseVec.y + vec.y, baseVec.z + vec.z);
+        return world.getBlockTileEntity(pos.x,pos.y,pos.z);
+    }
+
     public String getName() {
         return name;
     }
