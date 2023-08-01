@@ -1,8 +1,8 @@
 package sunsetsatellite.sunsetutils.util;
 
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.command.*;
+import com.mojang.nbt.CompoundTag;
+import net.minecraft.core.item.ItemStack;
+import net.minecraft.core.net.command.*;
 
 import java.util.Objects;
 
@@ -11,7 +11,7 @@ public class NBTEditCommand extends Command {
         super("nbtedit", "nbt");
     }
 
-    public static NBTTagCompound copy;
+    public static CompoundTag copy;
 
     @Override
     public boolean execute(CommandHandler commandHandler, CommandSender commandSender, String[] args) {
@@ -39,28 +39,28 @@ public class NBTEditCommand extends Command {
                         ItemStack stack = commandSender.getPlayer().inventory.getCurrentItem();
                         switch (args[2]){
                             case "integer":
-                                stack.tag.setInteger(args[3],Integer.parseInt(args[4]));
+                                stack.tag.putInt(args[3],Integer.parseInt(args[4]));
                                 return true;
                             case "string":
-                                stack.tag.setString(args[3],args[4]);
+                                stack.tag.putString(args[3],args[4]);
                                 return true;
                             case "byte":
-                                stack.tag.setByte(args[3],Byte.parseByte(args[4]));
+                                stack.tag.putByte(args[3],Byte.parseByte(args[4]));
                                 return true;
                             case "bool":
-                                stack.tag.setBoolean(args[3],Boolean.parseBoolean(args[4]));
+                                stack.tag.putBoolean(args[3],Boolean.parseBoolean(args[4]));
                                 return true;
                             case "double":
-                                stack.tag.setDouble(args[3],Double.parseDouble(args[4]));
+                                stack.tag.putDouble(args[3],Double.parseDouble(args[4]));
                                 return true;
                             case "float":
-                                stack.tag.setDouble(args[3],Float.parseFloat(args[4]));
+                                stack.tag.putDouble(args[3],Float.parseFloat(args[4]));
                                 return true;
                             case "long":
-                                stack.tag.setDouble(args[3],Long.parseLong(args[4]));
+                                stack.tag.putDouble(args[3],Long.parseLong(args[4]));
                                 return true;
                             case "short":
-                                stack.tag.setDouble(args[3],Short.parseShort(args[4]));
+                                stack.tag.putDouble(args[3],Short.parseShort(args[4]));
                                 return true;
                         }
                     }

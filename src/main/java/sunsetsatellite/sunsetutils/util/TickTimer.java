@@ -1,5 +1,7 @@
 package sunsetsatellite.sunsetutils.util;
 
+import net.minecraft.core.util.helper.ReflectionHelper;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -10,7 +12,13 @@ public class TickTimer {
     public int value = 0;
     public boolean loop = true;
 
-    public TickTimer(Object owner, Method timeout, int max, boolean loop){
+    public TickTimer(Object owner, String method, int max, boolean loop){
+        Method timeout;
+        try {
+            timeout = owner.getClass().getMethod(method);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
         this.owner = owner;
         this.timeout = timeout;
         this.max = max;

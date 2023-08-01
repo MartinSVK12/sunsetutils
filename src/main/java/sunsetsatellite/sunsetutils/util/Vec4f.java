@@ -1,6 +1,6 @@
 package sunsetsatellite.sunsetutils.util;
 
-import net.minecraft.src.NBTTagCompound;
+import com.mojang.nbt.CompoundTag;
 
 public class Vec4f {
     public double x;
@@ -23,7 +23,7 @@ public class Vec4f {
         this.x = this.y = this.z = this.w = size;
     }
 
-    public Vec4f(NBTTagCompound tag){
+    public Vec4f(CompoundTag tag){
         readFromNBT(tag);
     }
 
@@ -100,15 +100,15 @@ public class Vec4f {
         return this;
     }
 
-    public NBTTagCompound writeToNBT(NBTTagCompound tag){
-        tag.setDouble("x",this.x);
-        tag.setDouble("y",this.y);
-        tag.setDouble("z",this.z);
-        tag.setDouble("w",this.w);
+    public CompoundTag writeToNBT(CompoundTag tag){
+        tag.putDouble("x",this.x);
+        tag.putDouble("y",this.y);
+        tag.putDouble("z",this.z);
+        tag.putDouble("w",this.w);
         return tag;
     }
 
-    public void readFromNBT(NBTTagCompound tag){
+    public void readFromNBT(CompoundTag tag){
         this.x = tag.getDouble("x");
         this.y = tag.getDouble("y");
         this.z = tag.getDouble("z");

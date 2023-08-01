@@ -1,8 +1,8 @@
 package sunsetsatellite.sunsetutils.util;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.src.Block;
-import net.minecraft.src.Item;
+import net.minecraft.core.block.Block;
+import net.minecraft.core.item.Item;
 import sunsetsatellite.sunsetutils.SunsetUtils;
 
 import java.io.*;
@@ -18,7 +18,7 @@ public class Config {
     public Map<String,String> props = new HashMap<>();
     private final File configFile;
     public Config(String modId, Map<String,String> props, Class<?>[] idClasses){
-        this.configFile = new File((Minecraft.getMinecraftDir()) + "/config/" + modId + ".cfg");
+        this.configFile = new File((Minecraft.getMinecraft(Minecraft.class).getMinecraftDir()) + "/config/" + modId + ".cfg");
         this.modId = modId;
         this.idClasses = idClasses;
         this.props = props;
@@ -52,7 +52,7 @@ public class Config {
     }
 
     public Config(String modId, Map<String,String> props){
-        this.configFile = new File((Minecraft.getMinecraftDir()) + "/config/" + modId + ".cfg");
+        this.configFile = new File((Minecraft.getMinecraft(Minecraft.class).getMinecraftDir()) + "/config/" + modId + ".cfg");
         this.modId = modId;
         this.props = props;
         if (!configFile.exists()) {
@@ -76,7 +76,7 @@ public class Config {
     }
 
     public Config(String modId, Class<?>[] idClasses) {
-        this.configFile = new File((Minecraft.getMinecraftDir()) + "/config/" + modId + ".cfg");
+        this.configFile = new File((Minecraft.getMinecraft(Minecraft.class).getMinecraftDir()) + "/config/" + modId + ".cfg");
         this.modId = modId;
         this.idClasses = idClasses;
         if (!configFile.exists()) {
@@ -108,7 +108,7 @@ public class Config {
 
     private void writeConfig(){
         try {
-            new File(Minecraft.getMinecraftDir() + "/config").mkdirs();
+            new File(Minecraft.getMinecraft(Minecraft.class).getMinecraftDir() + "/config").mkdirs();
             BufferedWriter configWriter = new BufferedWriter(new FileWriter(configFile));
             configWriter.write("//"+modId+" configuration file. If a property is null or invalid a default value will be used. Configure options here:");
             for (Map.Entry<String, String> entry : props.entrySet()) {

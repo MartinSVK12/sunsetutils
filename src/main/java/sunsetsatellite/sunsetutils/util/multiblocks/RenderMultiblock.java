@@ -1,42 +1,47 @@
 package sunsetsatellite.sunsetutils.util.multiblocks;
 
-import net.minecraft.src.*;
+import com.mojang.nbt.CompoundTag;
+import net.minecraft.client.render.FontRenderer;
+import net.minecraft.client.render.RenderEngine;
+import net.minecraft.client.render.tileentity.TileEntityRenderer;
+import net.minecraft.core.block.Block;
+import net.minecraft.core.block.entity.TileEntity;
+import net.minecraft.core.world.World;
 import org.lwjgl.opengl.GL11;
-import sunsetsatellite.sunsetutils.SunsetUtils;
 import sunsetsatellite.sunsetutils.util.Direction;
 import sunsetsatellite.sunsetutils.util.RenderBlockSimple;
 import sunsetsatellite.sunsetutils.util.Vec3i;
 
 import java.util.Collection;
 
-public class RenderMultiblock extends TileEntitySpecialRenderer {
+public class RenderMultiblock extends TileEntityRenderer<TileEntity> {
     @Override
-    public void renderTileEntityAt(TileEntity tileEntity, double d, double e, double f, float g) {
+    public void doRender(TileEntity tileEntity, double d, double e, double f, float g) {
         int i = tileEntity.xCoord;
         int j = tileEntity.yCoord;
         int k = tileEntity.zCoord;
         Direction dir = Direction.getDirectionFromSide(tileEntity.getBlockMetadata());
-        World world = this.tileEntityRenderer.renderEngine.minecraft.theWorld;
+        World world = this.renderDispatcher.renderEngine.minecraft.theWorld;
         if(tileEntity instanceof IMultiblock){
-            Collection blocks = ((IMultiblock) tileEntity).getMultiblock().data.getCompoundTag("Data").func_28110_c();
-            Collection subs = ((IMultiblock) tileEntity).getMultiblock().data.getCompoundTag("Substitutions").func_28110_c();
+            Collection blocks = ((IMultiblock) tileEntity).getMultiblock().data.getCompound("Data").getValues();
+            Collection subs = ((IMultiblock) tileEntity).getMultiblock().data.getCompound("Substitutions").getValues();
             for (Object block : blocks) {
                 Vec3i pos;
-                int x = ((NBTTagCompound) block).getInteger("x");
-                int y = ((NBTTagCompound) block).getInteger("y");
-                int z = ((NBTTagCompound) block).getInteger("z");
+                int x = ((CompoundTag) block).getInteger("x");
+                int y = ((CompoundTag) block).getInteger("y");
+                int z = ((CompoundTag) block).getInteger("z");
                 pos = new Vec3i(x,y,z).rotate(new Vec3i(i,j,k),dir);
-                int id = Structure.getBlockId((NBTTagCompound) block);
-                int meta = ((NBTTagCompound) block).getInteger("meta");
-                if((Structure.getBlockId((NBTTagCompound) block) != tileEntity.getBlockType().blockID)){
+                int id = Structure.getBlockId((CompoundTag) block);
+                int meta = ((CompoundTag) block).getInteger("meta");
+                if((Structure.getBlockId((CompoundTag) block) != tileEntity.getBlockType().id)){
                     if(world.getBlockId(pos.x,pos.y,pos.z) != id || (world.getBlockId(pos.x,pos.y,pos.z) == id && world.getBlockMetadata(pos.x,pos.y,pos.z) != meta)){
                         boolean foundSub = false;
                         for (Object sub : subs) {
-                            int subX = ((NBTTagCompound) sub).getInteger("x");
-                            int subY = ((NBTTagCompound) sub).getInteger("y");
-                            int subZ = ((NBTTagCompound) sub).getInteger("z");
-                            int subId = Structure.getBlockId((NBTTagCompound) sub);
-                            int subMeta = ((NBTTagCompound) sub).getInteger("meta");
+                            int subX = ((CompoundTag) sub).getInteger("x");
+                            int subY = ((CompoundTag) sub).getInteger("y");
+                            int subZ = ((CompoundTag) sub).getInteger("z");
+                            int subId = Structure.getBlockId((CompoundTag) sub);
+                            int subMeta = ((CompoundTag) sub).getInteger("meta");
                             if(subX == x && subY == y && subZ == z){
                                 if(world.getBlockId(pos.x,pos.y,pos.z) == subId && ((world.getBlockMetadata(pos.x,pos.y,pos.z) == subMeta || subMeta == -1))){
                                     foundSub = true;
@@ -49,7 +54,7 @@ public class RenderMultiblock extends TileEntitySpecialRenderer {
                             GL11.glColor4f(1f,0,0,1.0f);
                             GL11.glTranslatef((float)d+(pos.x-i), (float)e+(pos.y-j), (float)f+(pos.z-k));
                             drawBlock(this.getFontRenderer(),
-                                    this.tileEntityRenderer.renderEngine,
+                                    this.renderDispatcher.renderEngine,
                                     id,
                                     meta,
                                     i,

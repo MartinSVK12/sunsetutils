@@ -1,7 +1,7 @@
 package sunsetsatellite.sunsetutils.util;
 
-import net.minecraft.src.MathHelper;
-import net.minecraft.src.NBTTagCompound;
+import com.mojang.nbt.CompoundTag;
+import net.minecraft.core.util.helper.MathHelper;
 
 public class Vec3i {
     public int x;
@@ -139,13 +139,13 @@ public class Vec3i {
         return pos;
     }
 
-    public void writeToNBT(NBTTagCompound tag){
-        tag.setInteger("x",this.x);
-        tag.setInteger("y",this.y);
-        tag.setInteger("z",this.z);
+    public void writeToNBT(CompoundTag tag){
+        tag.putInt("x",this.x);
+        tag.putInt("y",this.y);
+        tag.putInt("z",this.z);
     }
 
-    public void readFromNBT(NBTTagCompound tag){
+    public void readFromNBT(CompoundTag tag){
         this.x = tag.getInteger("x");
         this.y = tag.getInteger("y");
         this.z = tag.getInteger("z");

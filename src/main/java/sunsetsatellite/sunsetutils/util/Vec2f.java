@@ -1,7 +1,7 @@
 package sunsetsatellite.sunsetutils.util;
 
-import net.minecraft.src.MathHelper;
-import net.minecraft.src.NBTTagCompound;
+import com.mojang.nbt.CompoundTag;
+import net.minecraft.core.util.helper.MathHelper;
 
 public class Vec2f {
     public double x;
@@ -20,7 +20,7 @@ public class Vec2f {
         this.x = this.y = size;
     }
 
-    public Vec2f(NBTTagCompound tag){
+    public Vec2f(CompoundTag tag){
         readFromNBT(tag);
     }
 
@@ -78,12 +78,12 @@ public class Vec2f {
         return this;
     }
 
-    public void writeToNBT(NBTTagCompound tag){
-        tag.setDouble("x",this.x);
-        tag.setDouble("y",this.y);
+    public void writeToNBT(CompoundTag tag){
+        tag.putDouble("x",this.x);
+        tag.putDouble("y",this.y);
     }
 
-    public void readFromNBT(NBTTagCompound tag){
+    public void readFromNBT(CompoundTag tag){
         this.x = tag.getDouble("x");
         this.y = tag.getDouble("y");
     }

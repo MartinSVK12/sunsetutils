@@ -1,9 +1,8 @@
 package sunsetsatellite.sunsetutils.util.models;
 
-import net.minecraft.src.CompressedStreamTools;
-import net.minecraft.src.ModelRenderer;
-import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.NBTTagInt;
+import com.mojang.nbt.CompoundTag;
+import com.mojang.nbt.IntTag;
+import com.mojang.nbt.NbtIo;
 import sunsetsatellite.sunsetutils.SunsetUtils;
 import sunsetsatellite.sunsetutils.util.Vec2f;
 import sunsetsatellite.sunsetutils.util.Vec3f;
@@ -19,7 +18,7 @@ import java.util.zip.ZipException;
 public class NBTModel {
     public String modId;
     public String filePath;
-    public NBTTagCompound data;
+    public CompoundTag data;
     public ModelSurface[] surfaces;
     public String[] textures;
     public boolean rotatable;
@@ -37,15 +36,15 @@ public class NBTModel {
     protected void loadFromNBT(String filePath) {
         try (InputStream resource = this.getClass().getResourceAsStream("/assets/" + modId + "/models/" + filePath + ".nbt")) {
             if (resource != null) {
-                this.data = CompressedStreamTools.func_1138_a(resource);
+                this.data = NbtIo.readCompressed(resource);
                 ArrayList<ModelSurface> surfaces = new ArrayList<>();
-                for (Object o : data.func_28110_c()) {
-                    NBTTagCompound surfaceTag = (NBTTagCompound) o;
-                    int vertexAmount = surfaceTag.getCompoundTag("Vertices").func_28110_c().size();
-                    int indexAmount = surfaceTag.getCompoundTag("Indices").func_28110_c().size();
-                    NBTTagCompound translationTag = surfaceTag.getCompoundTag("Translation");
-                    NBTTagCompound rotationTag = surfaceTag.getCompoundTag("Rotation");
-                    NBTTagCompound scaleTag = surfaceTag.getCompoundTag("Scale");
+                for (Object o : data.getValues()) {
+                    CompoundTag surfaceTag = (CompoundTag) o;
+                    int vertexAmount = surfaceTag.getCompound("Vertices").getValues().size();
+                    int indexAmount = surfaceTag.getCompound("Indices").getValues().size();
+                    CompoundTag translationTag = surfaceTag.getCompound("Translation");
+                    CompoundTag rotationTag = surfaceTag.getCompound("Rotation");
+                    CompoundTag scaleTag = surfaceTag.getCompound("Scale");
                     Vec3f[] vertices = new Vec3f[vertexAmount];
                     Vec2f[] uvs = new Vec2f[vertexAmount];
                     Vec3f[] normals = new Vec3f[vertexAmount];
@@ -53,15 +52,15 @@ public class NBTModel {
                     Vec4f rotation = new Vec4f(rotationTag);
                     Vec3f scale = new Vec3f(scaleTag);
                     int[] indices = new int[indexAmount];
-                    for (Object o2 : surfaceTag.getCompoundTag("Indices").func_28110_c()) {
-                        NBTTagInt index = (NBTTagInt) o2;
-                        indices[Integer.parseInt(index.getKey())] = index.intValue;
+                    for (Object o2 : surfaceTag.getCompound("Indices").getValues()) {
+                        IntTag index = (IntTag) o2;
+                        indices[Integer.parseInt(index.getTagName())] = index.getValue();
                     }
                     for (int i = 0; i < vertexAmount; i++) {
-                        NBTTagCompound vertex = surfaceTag.getCompoundTag("Vertices").getCompoundTag(String.valueOf(i));
-                        NBTTagCompound pos = vertex.getCompoundTag("XYZ");
-                        NBTTagCompound uv = vertex.getCompoundTag("UV");
-                        NBTTagCompound norm = vertex.getCompoundTag("Normal");
+                        CompoundTag vertex = surfaceTag.getCompound("Vertices").getCompound(String.valueOf(i));
+                        CompoundTag pos = vertex.getCompound("XYZ");
+                        CompoundTag uv = vertex.getCompound("UV");
+                        CompoundTag norm = vertex.getCompound("Normal");
                         Vec3f vertexPos = new Vec3f(pos.getDouble("x"),pos.getDouble("y"),pos.getDouble("z"));
                         Vec2f vertexUV = new Vec2f(uv.getDouble("x"),uv.getDouble("y"));
                         Vec3f vertexNorm = new Vec3f(norm.getDouble("x"),norm.getDouble("y"),norm.getDouble("z"));

@@ -1,8 +1,8 @@
 package sunsetsatellite.sunsetutils.util.multiblocks;
 
-import net.minecraft.src.Block;
-import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.World;
+import com.mojang.nbt.CompoundTag;
+import net.minecraft.core.block.Block;
+import net.minecraft.core.world.World;
 import sunsetsatellite.sunsetutils.SunsetUtils;
 import sunsetsatellite.sunsetutils.util.BlockInstance;
 import sunsetsatellite.sunsetutils.util.Direction;
@@ -15,7 +15,7 @@ public class Multiblock extends Structure{
 
     public static final HashMap<String,Multiblock> multiblocks = new HashMap<>();
 
-    public Multiblock(String modId, Class<?>[] modClasses, String translateKey, NBTTagCompound data, boolean includeAir) {
+    public Multiblock(String modId, Class<?>[] modClasses, String translateKey, CompoundTag data, boolean includeAir) {
         super(modId, modClasses, translateKey, data, includeAir, false);
         this.translateKey = "multiblock."+modId+"."+translateKey+".name";
     }
@@ -27,8 +27,8 @@ public class Multiblock extends Structure{
 
     public ArrayList<BlockInstance> getTileEntities(World world, BlockInstance origin, Direction dir){
         ArrayList<BlockInstance> tiles = new ArrayList<>();
-        for (Object o : data.getCompoundTag("Data").func_28110_c()) {
-            NBTTagCompound block = (NBTTagCompound) o;
+        for (Object o : data.getCompound("Data").getValues()) {
+            CompoundTag block = (CompoundTag) o;
             int x = block.getInteger("x");
             int y = block.getInteger("y");
             int z = block.getInteger("z");
@@ -40,12 +40,12 @@ public class Multiblock extends Structure{
                     tiles.add(blockInstance);
                 }
             } else {
-                for (Object sub : data.getCompoundTag("Substitutions").func_28110_c()) {
-                    int subX = ((NBTTagCompound) sub).getInteger("x");
-                    int subY = ((NBTTagCompound) sub).getInteger("y");
-                    int subZ = ((NBTTagCompound) sub).getInteger("z");
+                for (Object sub : data.getCompound("Substitutions").getValues()) {
+                    int subX = ((CompoundTag) sub).getInteger("x");
+                    int subY = ((CompoundTag) sub).getInteger("y");
+                    int subZ = ((CompoundTag) sub).getInteger("z");
                     if(subX == x && subY == y && subZ == z){
-                        boolean isSubTile = ((NBTTagCompound) sub).getBoolean("tile");
+                        boolean isSubTile = ((CompoundTag) sub).getBoolean("tile");
                         if(isSubTile){
                             if(world.getBlockTileEntity(pos.x,pos.y,pos.z) != null){
                                 BlockInstance blockInstance = new BlockInstance(Block.blocksList[world.getBlockId(pos.x,pos.y,pos.z)],pos,world.getBlockMetadata(pos.x, pos.y, pos.z),world.getBlockTileEntity(pos.x, pos.y, pos.z));
@@ -60,8 +60,8 @@ public class Multiblock extends Structure{
     }
 
     public boolean isValidAt(World world, BlockInstance origin, Direction dir){
-        for (Object o : data.getCompoundTag("Data").func_28110_c()) {
-            NBTTagCompound block = (NBTTagCompound) o;
+        for (Object o : data.getCompound("Data").getValues()) {
+            CompoundTag block = (CompoundTag) o;
             int id = getBlockId(block);
             int meta = block.getInteger("meta");
             int x = block.getInteger("x");
@@ -74,12 +74,12 @@ public class Multiblock extends Structure{
                     && !pos.equals(origin.pos))
             ) {
                 boolean foundSub = false;
-                for (Object sub : data.getCompoundTag("Substitutions").func_28110_c()) {
-                    int subX = ((NBTTagCompound) sub).getInteger("x");
-                    int subY = ((NBTTagCompound) sub).getInteger("y");
-                    int subZ = ((NBTTagCompound) sub).getInteger("z");
-                    int subId = Structure.getBlockId((NBTTagCompound) sub);
-                    int subMeta = ((NBTTagCompound) sub).getInteger("meta");
+                for (Object sub : data.getCompound("Substitutions").getValues()) {
+                    int subX = ((CompoundTag) sub).getInteger("x");
+                    int subY = ((CompoundTag) sub).getInteger("y");
+                    int subZ = ((CompoundTag) sub).getInteger("z");
+                    int subId = Structure.getBlockId((CompoundTag) sub);
+                    int subMeta = ((CompoundTag) sub).getInteger("meta");
                     if(subX == x && subY == y && subZ == z){
                         if(world.getBlockId(pos.x,pos.y,pos.z) == subId && ((world.getBlockMetadata(pos.x,pos.y, pos.z) == subMeta || subMeta == -1))){
                             foundSub = true;

@@ -1,8 +1,8 @@
 package sunsetsatellite.sunsetutils.util;
 
-import net.minecraft.src.IBlockAccess;
-import net.minecraft.src.TileEntity;
-import net.minecraft.src.Vec3D;
+import net.minecraft.core.block.entity.TileEntity;
+import net.minecraft.core.util.phys.Vec3d;
+import net.minecraft.core.world.WorldSource;
 
 public enum Direction {
     X_POS (new Vec3i(1,0,0),5,"EAST"),
@@ -23,12 +23,12 @@ public enum Direction {
         this.name = name;
     }
 
-    public TileEntity getTileEntity(IBlockAccess world, TileEntity tile){
+    public TileEntity getTileEntity(WorldSource world, TileEntity tile){
         Vec3i pos = new Vec3i(tile.xCoord + vec.x, tile.yCoord + vec.y, tile.zCoord + vec.z);
         return world.getBlockTileEntity(pos.x,pos.y,pos.z);
     }
 
-    public TileEntity getTileEntity(IBlockAccess world, Vec3i baseVec){
+    public TileEntity getTileEntity(WorldSource world, Vec3i baseVec){
         Vec3i pos = new Vec3i(baseVec.x + vec.x, baseVec.y + vec.y, baseVec.z + vec.z);
         return world.getBlockTileEntity(pos.x,pos.y,pos.z);
     }
@@ -75,8 +75,8 @@ public enum Direction {
         return new Vec3f(vec.x, vec.y, vec.z);
     }
 
-    public Vec3D getMinecraftVec(){
-        return Vec3D.createVectorHelper(vec.x, vec.y, vec.z);
+    public Vec3d getMinecraftVec(){
+        return Vec3d.createVectorHelper(vec.x, vec.y, vec.z);
     }
 
     static {

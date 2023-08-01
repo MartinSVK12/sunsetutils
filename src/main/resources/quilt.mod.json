@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "quilt_loader": {
+    "entrypoints": {
+      "main": [
+        "sunsetsatellite.sunsetutils.SunsetUtils"
+      ]
+    },
+    "group": "sunsetsatellite",
+    "id":"sunsetutils",
+    "version": "1.6.2",
+    "intermediate_mappings": "net.fabricmc:intermediary",
+    "metadata": {
+      "name": "Sunset Utils",
+      "description": "*slaps library* this bad boy can fit so much common code in it.",
+      "contact": {
+        "homepage": "https://github.com/MartinSVK12/sunsetutils",
+        "sources": "https://github.com/MartinSVK12/sunsetutils",
+        "issues": "https://github.com/MartinSVK12/sunsetutils"
+      },
+      "license": "MIT",
+      "contributors": {
+        "MartinSVK12": "Author"
+      },
+      "icon": "icon.png"
+    }
+  },
+  "mixin": [
+    "sunsetutils.mixins.json"
+  ]
+}

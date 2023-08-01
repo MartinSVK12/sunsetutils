@@ -1,11 +1,13 @@
 package sunsetsatellite.sunsetutils.util;
 
-import net.minecraft.shared.Minecraft;
-import net.minecraft.src.Block;
-import net.minecraft.src.Tessellator;
-import net.minecraft.src.TextureFX;
-import net.minecraft.src.World;
-import net.minecraft.src.helper.Color;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.TextureFX;
+import net.minecraft.client.render.block.color.BlockColorDispatcher;
+import net.minecraft.core.Global;
+import net.minecraft.core.block.Block;
+import net.minecraft.core.util.helper.Color;
+import net.minecraft.core.util.helper.Side;
+import net.minecraft.core.world.World;
 import org.lwjgl.opengl.GL11;
 
 public class RenderBlockSimple {
@@ -46,20 +48,20 @@ public class RenderBlockSimple {
             i = this.overrideBlockTexture;
         }
 
-        int j = i % Minecraft.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-        int k = i / Minecraft.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-        double d3 = ((double)j + block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-        double d4 = ((double)j + block.maxX * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-        double d5 = ((double)k + block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-        double d6 = ((double)k + block.maxZ * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
+        int j = i % Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
+        int k = i / Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
+        double d3 = ((double)j + block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+        double d4 = ((double)j + block.maxX * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+        double d5 = ((double)k + block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+        double d6 = ((double)k + block.maxZ * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
         if (block.minX < 0.0 || block.maxX > 1.0) {
-            d3 = (double)(((float)j + 0.0F) / (float)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES));
-            d4 = (double)(((float)j + ((float)TextureFX.tileWidthTerrain - 0.01F)) / (float)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES));
+            d3 = (double)(((float)j + 0.0F) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES));
+            d4 = (double)(((float)j + ((float)TextureFX.tileWidthTerrain - 0.01F)) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES));
         }
 
         if (block.minZ < 0.0 || block.maxZ > 1.0) {
-            d5 = (double)(((float)k + 0.0F) / (float)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES));
-            d6 = (double)(((float)k + ((float)TextureFX.tileWidthTerrain - 0.01F)) / (float)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES));
+            d5 = (double)(((float)k + 0.0F) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES));
+            d6 = (double)(((float)k + ((float)TextureFX.tileWidthTerrain - 0.01F)) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES));
         }
 
         double d7 = d4;
@@ -67,10 +69,10 @@ public class RenderBlockSimple {
         double d9 = d5;
         double d10 = d6;
         if (this.uvRotateBottom == 2) {
-            d3 = ((double)j + block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d5 = ((double)(k + TextureFX.tileWidthTerrain) - block.maxX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d4 = ((double)j + block.maxZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d6 = ((double)(k + TextureFX.tileWidthTerrain) - block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
+            d3 = ((double)j + block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d5 = ((double)(k + TextureFX.tileWidthTerrain) - block.maxX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d4 = ((double)j + block.maxZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d6 = ((double)(k + TextureFX.tileWidthTerrain) - block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
             d9 = d5;
             d10 = d6;
             d7 = d3;
@@ -78,10 +80,10 @@ public class RenderBlockSimple {
             d5 = d6;
             d6 = d9;
         } else if (this.uvRotateBottom == 1) {
-            d3 = ((double)(j + TextureFX.tileWidthTerrain) - block.maxZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d5 = ((double)k + block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d4 = ((double)(j + TextureFX.tileWidthTerrain) - block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d6 = ((double)k + block.maxX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
+            d3 = ((double)(j + TextureFX.tileWidthTerrain) - block.maxZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d5 = ((double)k + block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d4 = ((double)(j + TextureFX.tileWidthTerrain) - block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d6 = ((double)k + block.maxX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
             d7 = d4;
             d8 = d3;
             d3 = d4;
@@ -89,10 +91,10 @@ public class RenderBlockSimple {
             d9 = d6;
             d10 = d5;
         } else if (this.uvRotateBottom == 3) {
-            d3 = ((double)(j + TextureFX.tileWidthTerrain) - block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d4 = ((double)(j + TextureFX.tileWidthTerrain) - block.maxX * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d5 = ((double)(k + TextureFX.tileWidthTerrain) - block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d6 = ((double)(k + TextureFX.tileWidthTerrain) - block.maxZ * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
+            d3 = ((double)(j + TextureFX.tileWidthTerrain) - block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d4 = ((double)(j + TextureFX.tileWidthTerrain) - block.maxX * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d5 = ((double)(k + TextureFX.tileWidthTerrain) - block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d6 = ((double)(k + TextureFX.tileWidthTerrain) - block.maxZ * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
             d7 = d4;
             d8 = d3;
             d9 = d5;
@@ -128,20 +130,20 @@ public class RenderBlockSimple {
             i = this.overrideBlockTexture;
         }
 
-        int j = i % Minecraft.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-        int k = i / Minecraft.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-        double d3 = ((double)j + block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-        double d4 = ((double)j + block.maxX * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-        double d5 = ((double)k + block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-        double d6 = ((double)k + block.maxZ * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
+        int j = i % Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
+        int k = i / Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
+        double d3 = ((double)j + block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+        double d4 = ((double)j + block.maxX * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+        double d5 = ((double)k + block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+        double d6 = ((double)k + block.maxZ * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
         if (block.minX < 0.0 || block.maxX > 1.0) {
-            d3 = (double)(((float)j + 0.0F) / (float)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES));
-            d4 = (double)(((float)j + ((float)TextureFX.tileWidthTerrain - 0.01F)) / (float)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES));
+            d3 = (double)(((float)j + 0.0F) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES));
+            d4 = (double)(((float)j + ((float)TextureFX.tileWidthTerrain - 0.01F)) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES));
         }
 
         if (block.minZ < 0.0 || block.maxZ > 1.0) {
-            d5 = (double)(((float)k + 0.0F) / (float)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES));
-            d6 = (double)(((float)k + ((float)TextureFX.tileWidthTerrain - 0.01F)) / (float)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES));
+            d5 = (double)(((float)k + 0.0F) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES));
+            d6 = (double)(((float)k + ((float)TextureFX.tileWidthTerrain - 0.01F)) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES));
         }
 
         double d7 = d4;
@@ -149,10 +151,10 @@ public class RenderBlockSimple {
         double d9 = d5;
         double d10 = d6;
         if (this.uvRotateTop == 1) {
-            d3 = ((double)j + block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d5 = ((double)(k + TextureFX.tileWidthTerrain) - block.maxX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d4 = ((double)j + block.maxZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d6 = ((double)(k + TextureFX.tileWidthTerrain) - block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
+            d3 = ((double)j + block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d5 = ((double)(k + TextureFX.tileWidthTerrain) - block.maxX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d4 = ((double)j + block.maxZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d6 = ((double)(k + TextureFX.tileWidthTerrain) - block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
             d9 = d5;
             d10 = d6;
             d7 = d3;
@@ -160,10 +162,10 @@ public class RenderBlockSimple {
             d5 = d6;
             d6 = d9;
         } else if (this.uvRotateTop == 2) {
-            d3 = ((double)(j + TextureFX.tileWidthTerrain) - block.maxZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d5 = ((double)k + block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d4 = ((double)(j + TextureFX.tileWidthTerrain) - block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d6 = ((double)k + block.maxX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
+            d3 = ((double)(j + TextureFX.tileWidthTerrain) - block.maxZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d5 = ((double)k + block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d4 = ((double)(j + TextureFX.tileWidthTerrain) - block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d6 = ((double)k + block.maxX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
             d7 = d4;
             d8 = d3;
             d3 = d4;
@@ -171,10 +173,10 @@ public class RenderBlockSimple {
             d9 = d6;
             d10 = d5;
         } else if (this.uvRotateTop == 3) {
-            d3 = ((double)(j + TextureFX.tileWidthTerrain) - block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d4 = ((double)(j + TextureFX.tileWidthTerrain) - block.maxX * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d5 = ((double)(k + TextureFX.tileWidthTerrain) - block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d6 = ((double)(k + TextureFX.tileWidthTerrain) - block.maxZ * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
+            d3 = ((double)(j + TextureFX.tileWidthTerrain) - block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d4 = ((double)(j + TextureFX.tileWidthTerrain) - block.maxX * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d5 = ((double)(k + TextureFX.tileWidthTerrain) - block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d6 = ((double)(k + TextureFX.tileWidthTerrain) - block.maxZ * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
             d7 = d4;
             d8 = d3;
             d9 = d5;
@@ -210,12 +212,12 @@ public class RenderBlockSimple {
             i = this.overrideBlockTexture;
         }
 
-        int j = i % Minecraft.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-        int k = i / Minecraft.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-        double d3 = ((double)j + block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-        double d4 = ((double)j + block.maxX * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-        double d5 = ((double)(k + TextureFX.tileWidthTerrain) - block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-        double d6 = ((double)(k + TextureFX.tileWidthTerrain) - block.minY * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
+        int j = i % Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
+        int k = i / Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
+        double d3 = ((double)j + block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+        double d4 = ((double)j + block.maxX * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+        double d5 = ((double)(k + TextureFX.tileWidthTerrain) - block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+        double d6 = ((double)(k + TextureFX.tileWidthTerrain) - block.minY * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
         double d8;
         if (this.flipTexture) {
             d8 = d3;
@@ -224,13 +226,13 @@ public class RenderBlockSimple {
         }
 
         if (block.minX < 0.0 || block.maxX > 1.0) {
-            d3 = (double)(((float)j + 0.0F) / (float)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES));
-            d4 = (double)(((float)j + ((float)TextureFX.tileWidthTerrain - 0.01F)) / (float)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES));
+            d3 = (double)(((float)j + 0.0F) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES));
+            d4 = (double)(((float)j + ((float)TextureFX.tileWidthTerrain - 0.01F)) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES));
         }
 
         if (block.minY < 0.0 || block.maxY > 1.0) {
-            d5 = (double)(((float)k + 0.0F) / (float)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES));
-            d6 = (double)(((float)k + ((float)TextureFX.tileWidthTerrain - 0.01F)) / (float)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES));
+            d5 = (double)(((float)k + 0.0F) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES));
+            d6 = (double)(((float)k + ((float)TextureFX.tileWidthTerrain - 0.01F)) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES));
         }
 
         d8 = d4;
@@ -238,10 +240,10 @@ public class RenderBlockSimple {
         double d10 = d5;
         double d11 = d6;
         if (this.uvRotateEast == 2) {
-            d3 = ((double)j + block.minY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d5 = ((double)(k + TextureFX.tileWidthTerrain) - block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d4 = ((double)j + block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d6 = ((double)(k + TextureFX.tileWidthTerrain) - block.maxX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
+            d3 = ((double)j + block.minY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d5 = ((double)(k + TextureFX.tileWidthTerrain) - block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d4 = ((double)j + block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d6 = ((double)(k + TextureFX.tileWidthTerrain) - block.maxX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
             d10 = d5;
             d11 = d6;
             d8 = d3;
@@ -249,10 +251,10 @@ public class RenderBlockSimple {
             d5 = d6;
             d6 = d10;
         } else if (this.uvRotateEast == 1) {
-            d3 = ((double)(j + TextureFX.tileWidthTerrain) - block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d5 = ((double)k + block.maxX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d4 = ((double)(j + TextureFX.tileWidthTerrain) - block.minY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d6 = ((double)k + block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
+            d3 = ((double)(j + TextureFX.tileWidthTerrain) - block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d5 = ((double)k + block.maxX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d4 = ((double)(j + TextureFX.tileWidthTerrain) - block.minY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d6 = ((double)k + block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
             d8 = d4;
             d9 = d3;
             d3 = d4;
@@ -260,10 +262,10 @@ public class RenderBlockSimple {
             d10 = d6;
             d11 = d5;
         } else if (this.uvRotateEast == 3) {
-            d3 = ((double)(j + TextureFX.tileWidthTerrain) - block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d4 = ((double)(j + TextureFX.tileWidthTerrain) - block.maxX * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d5 = ((double)k + block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d6 = ((double)k + block.minY * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
+            d3 = ((double)(j + TextureFX.tileWidthTerrain) - block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d4 = ((double)(j + TextureFX.tileWidthTerrain) - block.maxX * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d5 = ((double)k + block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d6 = ((double)k + block.minY * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
             d8 = d4;
             d9 = d3;
             d10 = d5;
@@ -299,12 +301,12 @@ public class RenderBlockSimple {
             i = this.overrideBlockTexture;
         }
 
-        int j = i % Minecraft.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-        int k = i / Minecraft.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-        double d3 = ((double)j + block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-        double d4 = ((double)j + block.maxX * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-        double d5 = ((double)(k + TextureFX.tileWidthTerrain) - block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-        double d6 = ((double)(k + TextureFX.tileWidthTerrain) - block.minY * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
+        int j = i % Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
+        int k = i / Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
+        double d3 = ((double)j + block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+        double d4 = ((double)j + block.maxX * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+        double d5 = ((double)(k + TextureFX.tileWidthTerrain) - block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+        double d6 = ((double)(k + TextureFX.tileWidthTerrain) - block.minY * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
         double d8;
         if (this.flipTexture) {
             d8 = d3;
@@ -313,13 +315,13 @@ public class RenderBlockSimple {
         }
 
         if (block.minX < 0.0 || block.maxX > 1.0) {
-            d3 = (double)(((float)j + 0.0F) / (float)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES));
-            d4 = (double)(((float)j + ((float)TextureFX.tileWidthTerrain - 0.01F)) / (float)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES));
+            d3 = (double)(((float)j + 0.0F) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES));
+            d4 = (double)(((float)j + ((float)TextureFX.tileWidthTerrain - 0.01F)) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES));
         }
 
         if (block.minY < 0.0 || block.maxY > 1.0) {
-            d5 = (double)(((float)k + 0.0F) / (float)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES));
-            d6 = (double)(((float)k + ((float)TextureFX.tileWidthTerrain - 0.01F)) / (float)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES));
+            d5 = (double)(((float)k + 0.0F) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES));
+            d6 = (double)(((float)k + ((float)TextureFX.tileWidthTerrain - 0.01F)) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES));
         }
 
         d8 = d4;
@@ -327,10 +329,10 @@ public class RenderBlockSimple {
         double d10 = d5;
         double d11 = d6;
         if (this.uvRotateWest == 1) {
-            d3 = ((double)j + block.minY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d6 = ((double)(k + TextureFX.tileWidthTerrain) - block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d4 = ((double)j + block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d5 = ((double)(k + TextureFX.tileWidthTerrain) - block.maxX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
+            d3 = ((double)j + block.minY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d6 = ((double)(k + TextureFX.tileWidthTerrain) - block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d4 = ((double)j + block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d5 = ((double)(k + TextureFX.tileWidthTerrain) - block.maxX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
             d10 = d5;
             d11 = d6;
             d8 = d3;
@@ -338,10 +340,10 @@ public class RenderBlockSimple {
             d5 = d6;
             d6 = d10;
         } else if (this.uvRotateWest == 2) {
-            d3 = ((double)(j + TextureFX.tileWidthTerrain) - block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d5 = ((double)k + block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d4 = ((double)(j + TextureFX.tileWidthTerrain) - block.minY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d6 = ((double)k + block.maxX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
+            d3 = ((double)(j + TextureFX.tileWidthTerrain) - block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d5 = ((double)k + block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d4 = ((double)(j + TextureFX.tileWidthTerrain) - block.minY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d6 = ((double)k + block.maxX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
             d8 = d4;
             d9 = d3;
             d3 = d4;
@@ -349,10 +351,10 @@ public class RenderBlockSimple {
             d10 = d6;
             d11 = d5;
         } else if (this.uvRotateWest == 3) {
-            d3 = ((double)(j + TextureFX.tileWidthTerrain) - block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d4 = ((double)(j + TextureFX.tileWidthTerrain) - block.maxX * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d5 = ((double)k + block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d6 = ((double)k + block.minY * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
+            d3 = ((double)(j + TextureFX.tileWidthTerrain) - block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d4 = ((double)(j + TextureFX.tileWidthTerrain) - block.maxX * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d5 = ((double)k + block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d6 = ((double)k + block.minY * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
             d8 = d4;
             d9 = d3;
             d10 = d5;
@@ -388,12 +390,12 @@ public class RenderBlockSimple {
             i = this.overrideBlockTexture;
         }
 
-        int j = i % Minecraft.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-        int k = i / Minecraft.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-        double d3 = ((double)j + block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-        double d4 = ((double)j + block.maxZ * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-        double d5 = ((double)(k + TextureFX.tileWidthTerrain) - block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-        double d6 = ((double)(k + TextureFX.tileWidthTerrain) - block.minY * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
+        int j = i % Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
+        int k = i / Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
+        double d3 = ((double)j + block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+        double d4 = ((double)j + block.maxZ * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+        double d5 = ((double)(k + TextureFX.tileWidthTerrain) - block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+        double d6 = ((double)(k + TextureFX.tileWidthTerrain) - block.minY * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
         double d8;
         if (this.flipTexture) {
             d8 = d3;
@@ -402,13 +404,13 @@ public class RenderBlockSimple {
         }
 
         if (block.minZ < 0.0 || block.maxZ > 1.0) {
-            d3 = (double)(((float)j + 0.0F) / (float)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES));
-            d4 = (double)(((float)j + ((float)TextureFX.tileWidthTerrain - 0.01F)) / (float)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES));
+            d3 = (double)(((float)j + 0.0F) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES));
+            d4 = (double)(((float)j + ((float)TextureFX.tileWidthTerrain - 0.01F)) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES));
         }
 
         if (block.minY < 0.0 || block.maxY > 1.0) {
-            d5 = (double)(((float)k + 0.0F) / (float)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES));
-            d6 = (double)(((float)k + ((float)TextureFX.tileWidthTerrain - 0.01F)) / (float)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES));
+            d5 = (double)(((float)k + 0.0F) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES));
+            d6 = (double)(((float)k + ((float)TextureFX.tileWidthTerrain - 0.01F)) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES));
         }
 
         d8 = d4;
@@ -416,10 +418,10 @@ public class RenderBlockSimple {
         double d10 = d5;
         double d11 = d6;
         if (this.uvRotateNorth == 1) {
-            d3 = ((double)j + block.minY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d5 = ((double)(k + TextureFX.tileWidthTerrain) - block.maxZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d4 = ((double)j + block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d6 = ((double)(k + TextureFX.tileWidthTerrain) - block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
+            d3 = ((double)j + block.minY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d5 = ((double)(k + TextureFX.tileWidthTerrain) - block.maxZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d4 = ((double)j + block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d6 = ((double)(k + TextureFX.tileWidthTerrain) - block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
             d10 = d5;
             d11 = d6;
             d8 = d3;
@@ -427,10 +429,10 @@ public class RenderBlockSimple {
             d5 = d6;
             d6 = d10;
         } else if (this.uvRotateNorth == 2) {
-            d3 = ((double)(j + TextureFX.tileWidthTerrain) - block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d5 = ((double)k + block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d4 = ((double)(j + TextureFX.tileWidthTerrain) - block.minY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d6 = ((double)k + block.maxZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
+            d3 = ((double)(j + TextureFX.tileWidthTerrain) - block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d5 = ((double)k + block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d4 = ((double)(j + TextureFX.tileWidthTerrain) - block.minY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d6 = ((double)k + block.maxZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
             d8 = d4;
             d9 = d3;
             d3 = d4;
@@ -438,10 +440,10 @@ public class RenderBlockSimple {
             d10 = d6;
             d11 = d5;
         } else if (this.uvRotateNorth == 3) {
-            d3 = ((double)(j + TextureFX.tileWidthTerrain) - block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d4 = ((double)(j + TextureFX.tileWidthTerrain) - block.maxZ * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d5 = ((double)k + block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d6 = ((double)k + block.minY * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
+            d3 = ((double)(j + TextureFX.tileWidthTerrain) - block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d4 = ((double)(j + TextureFX.tileWidthTerrain) - block.maxZ * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d5 = ((double)k + block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d6 = ((double)k + block.minY * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
             d8 = d4;
             d9 = d3;
             d10 = d5;
@@ -477,12 +479,12 @@ public class RenderBlockSimple {
             i = this.overrideBlockTexture;
         }
 
-        int j = i % Minecraft.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-        int k = i / Minecraft.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-        double d3 = ((double)j + block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-        double d4 = ((double)j + block.maxZ * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-        double d5 = ((double)(k + TextureFX.tileWidthTerrain) - block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-        double d6 = ((double)(k + TextureFX.tileWidthTerrain) - block.minY * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
+        int j = i % Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
+        int k = i / Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
+        double d3 = ((double)j + block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+        double d4 = ((double)j + block.maxZ * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+        double d5 = ((double)(k + TextureFX.tileWidthTerrain) - block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+        double d6 = ((double)(k + TextureFX.tileWidthTerrain) - block.minY * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
         double d8;
         if (this.flipTexture) {
             d8 = d3;
@@ -491,13 +493,13 @@ public class RenderBlockSimple {
         }
 
         if (block.minZ < 0.0 || block.maxZ > 1.0) {
-            d3 = (double)(((float)j + 0.0F) / (float)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES));
-            d4 = (double)(((float)j + ((float)TextureFX.tileWidthTerrain - 0.01F)) / (float)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES));
+            d3 = (double)(((float)j + 0.0F) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES));
+            d4 = (double)(((float)j + ((float)TextureFX.tileWidthTerrain - 0.01F)) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES));
         }
 
         if (block.minY < 0.0 || block.maxY > 1.0) {
-            d5 = (double)(((float)k + 0.0F) / (float)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES));
-            d6 = (double)(((float)k + ((float)TextureFX.tileWidthTerrain - 0.01F)) / (float)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES));
+            d5 = (double)(((float)k + 0.0F) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES));
+            d6 = (double)(((float)k + ((float)TextureFX.tileWidthTerrain - 0.01F)) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES));
         }
 
         d8 = d4;
@@ -505,10 +507,10 @@ public class RenderBlockSimple {
         double d10 = d5;
         double d11 = d6;
         if (this.uvRotateSouth == 2) {
-            d3 = ((double)j + block.minY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d5 = ((double)(k + TextureFX.tileWidthTerrain) - block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d4 = ((double)j + block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d6 = ((double)(k + TextureFX.tileWidthTerrain) - block.maxZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
+            d3 = ((double)j + block.minY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d5 = ((double)(k + TextureFX.tileWidthTerrain) - block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d4 = ((double)j + block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d6 = ((double)(k + TextureFX.tileWidthTerrain) - block.maxZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
             d10 = d5;
             d11 = d6;
             d8 = d3;
@@ -516,10 +518,10 @@ public class RenderBlockSimple {
             d5 = d6;
             d6 = d10;
         } else if (this.uvRotateSouth == 1) {
-            d3 = ((double)(j + TextureFX.tileWidthTerrain) - block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d5 = ((double)k + block.maxZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d4 = ((double)(j + TextureFX.tileWidthTerrain) - block.minY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d6 = ((double)k + block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
+            d3 = ((double)(j + TextureFX.tileWidthTerrain) - block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d5 = ((double)k + block.maxZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d4 = ((double)(j + TextureFX.tileWidthTerrain) - block.minY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d6 = ((double)k + block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
             d8 = d4;
             d9 = d3;
             d3 = d4;
@@ -527,10 +529,10 @@ public class RenderBlockSimple {
             d10 = d6;
             d11 = d5;
         } else if (this.uvRotateSouth == 3) {
-            d3 = ((double)(j + TextureFX.tileWidthTerrain) - block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d4 = ((double)(j + TextureFX.tileWidthTerrain) - block.maxZ * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d5 = ((double)k + block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
-            d6 = ((double)k + block.minY * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Minecraft.TEXTURE_ATLAS_WIDTH_TILES);
+            d3 = ((double)(j + TextureFX.tileWidthTerrain) - block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d4 = ((double)(j + TextureFX.tileWidthTerrain) - block.maxZ * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d5 = ((double)k + block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+            d6 = ((double)k + block.minY * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
             d8 = d4;
             d9 = d3;
             d10 = d5;
@@ -564,32 +566,32 @@ public class RenderBlockSimple {
         Tessellator tessellator = Tessellator.instance;
         tessellator.startDrawingQuads();
         tessellator.setNormal(0.0F, -1.0F, 0.0F);
-        if (block.blockID == Block.fluidWaterFlowing.blockID) {
-            Color c = (new Color()).setARGB(Block.fluidWaterFlowing.colorMultiplier(world, world, x, y, z));
+        if (block.id == Block.fluidWaterFlowing.id) {
+            Color c = (new Color()).setARGB(BlockColorDispatcher.getInstance().getDispatch(Block.fluidLavaFlowing).getWorldColor(world, x, y, z));//Block.fluidWaterFlowing.colorMultiplier(world, world, x, y, z));
             GL11.glColor4f((float)c.getRed() / 255.0F, (float)c.getGreen() / 255.0F, (float)c.getBlue() / 255.0F, 1.0F);
         }
 
-        this.renderBottomFace(block, 0.0, 0.0, 0.0, block.getBlockTextureFromSideAndMetadata(0, i));
+        this.renderBottomFace(block, 0.0, 0.0, 0.0, block.getBlockTextureFromSideAndMetadata(Side.BOTTOM, i));
         tessellator.draw();
         tessellator.startDrawingQuads();
         tessellator.setNormal(0.0F, 1.0F, 0.0F);
-        this.renderTopFace(block, 0.0, 0.0, 0.0, block.getBlockTextureFromSideAndMetadata(1, i));
+        this.renderTopFace(block, 0.0, 0.0, 0.0, block.getBlockTextureFromSideAndMetadata(Side.TOP, i));
         tessellator.draw();
         tessellator.startDrawingQuads();
         tessellator.setNormal(0.0F, 0.0F, -1.0F);
-        this.renderEastFace(block, 0.0, 0.0, 0.0, block.getBlockTextureFromSideAndMetadata(2, i));
+        this.renderEastFace(block, 0.0, 0.0, 0.0, block.getBlockTextureFromSideAndMetadata(Side.EAST, i));
         tessellator.draw();
         tessellator.startDrawingQuads();
         tessellator.setNormal(0.0F, 0.0F, 1.0F);
-        this.renderWestFace(block, 0.0, 0.0, 0.0, block.getBlockTextureFromSideAndMetadata(3, i));
+        this.renderWestFace(block, 0.0, 0.0, 0.0, block.getBlockTextureFromSideAndMetadata(Side.WEST, i));
         tessellator.draw();
         tessellator.startDrawingQuads();
         tessellator.setNormal(-1.0F, 0.0F, 0.0F);
-        this.renderNorthFace(block, 0.0, 0.0, 0.0, block.getBlockTextureFromSideAndMetadata(4, i));
+        this.renderNorthFace(block, 0.0, 0.0, 0.0, block.getBlockTextureFromSideAndMetadata(Side.NORTH, i));
         tessellator.draw();
         tessellator.startDrawingQuads();
         tessellator.setNormal(1.0F, 0.0F, 0.0F);
-        this.renderSouthFace(block, 0.0, 0.0, 0.0, block.getBlockTextureFromSideAndMetadata(5, i));
+        this.renderSouthFace(block, 0.0, 0.0, 0.0, block.getBlockTextureFromSideAndMetadata(Side.SOUTH, i));
         tessellator.draw();
     }
 }

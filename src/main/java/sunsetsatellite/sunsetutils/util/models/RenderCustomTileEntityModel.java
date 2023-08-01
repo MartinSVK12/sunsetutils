@@ -1,17 +1,17 @@
 package sunsetsatellite.sunsetutils.util.models;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.src.*;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.tileentity.TileEntityRenderer;
+import net.minecraft.core.block.entity.TileEntity;
 import org.lwjgl.opengl.GL11;
-import sunsetsatellite.sunsetutils.SunsetUtils;
 import sunsetsatellite.sunsetutils.util.Direction;
 import sunsetsatellite.sunsetutils.util.Vec2f;
 import sunsetsatellite.sunsetutils.util.Vec3f;
-import sunsetsatellite.sunsetutils.util.Vec4f;
 
-public class RenderCustomTileEntityModel extends TileEntitySpecialRenderer {
+public class RenderCustomTileEntityModel extends TileEntityRenderer<TileEntity> {
     @Override
-    public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float g) {
+    public void doRender(TileEntity tileEntity, double x, double y, double z, float g) {
         if(tileEntity.getBlockType() != null && tileEntity.getBlockType() instanceof ICustomBlockModel){
             render(x,y,z,tileEntity,((ICustomBlockModel) tileEntity.getBlockType()).getModel());
         }
@@ -56,8 +56,8 @@ public class RenderCustomTileEntityModel extends TileEntitySpecialRenderer {
 
             for (int index : surface.indices) {
                 String texture = model.textures[surface.texture];
-                Minecraft.getMinecraft().renderEngine.bindTexture(Minecraft.getMinecraft().renderEngine.getTexture(texture));
-                float brightness = 1;//block.getBlockBrightness(Minecraft.getMinecraft().theWorld,x,y,z);
+                Minecraft.getMinecraft(Minecraft.class).renderEngine.bindTexture(Minecraft.getMinecraft(Minecraft.class).renderEngine.getTexture(texture));
+                float brightness = 1;//block.getBlockBrightness(Minecraft.getMinecraft(Minecraft.class).theWorld,x,y,z);
                 tessellator.setColorOpaque_F(1 * brightness,1 * brightness,1 * brightness);
                 Vec3f vertex = surface.vertices[index];
                 Vec2f uv = surface.uvs[index].copy();

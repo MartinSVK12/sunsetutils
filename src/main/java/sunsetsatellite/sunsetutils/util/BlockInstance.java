@@ -1,7 +1,7 @@
 package sunsetsatellite.sunsetutils.util;
 
-import net.minecraft.src.Block;
-import net.minecraft.src.TileEntity;
+import net.minecraft.core.block.Block;
+import net.minecraft.core.block.entity.TileEntity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
