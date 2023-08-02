@@ -8,7 +8,7 @@
     },
     "group": "sunsetsatellite",
     "id":"sunsetutils",
-    "version": "1.6.2",
+    "version": "1.6.3",
     "intermediate_mappings": "net.fabricmc:intermediary",
     "metadata": {
       "name": "Sunset Utils",

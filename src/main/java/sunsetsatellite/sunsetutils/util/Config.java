@@ -139,7 +139,7 @@ public class Config {
         }
     }
 
-    public Integer getFromConfig(String key, Integer base){
+    public int getFromConfig(String key, int base){
         try {
             SunsetUtils.LOGGER.info("("+modId+") "+"Getting value for: "+key+" (base: "+base+")");
             BufferedReader configReader = new BufferedReader(new FileReader(configFile));
@@ -156,6 +156,62 @@ public class Config {
                     if (id > 16384){
                         id -= 16384 * (id % 16384);
                     }
+                    if (name.equalsIgnoreCase(key)){
+                        SunsetUtils.LOGGER.info("("+modId+") "+"Value: "+id);
+                        return id;
+                    }
+                }
+            }
+            configReader.close();
+        } catch (Exception e) {
+            SunsetUtils.LOGGER.error("Failed to read "+key+" from config for "+modId+"!");
+            e.printStackTrace();
+        }
+        SunsetUtils.LOGGER.info("("+modId+") "+"No value defined, returning base: "+base);
+        return base;
+    }
+
+    public double getFromConfig(String key, double base){
+        try {
+            SunsetUtils.LOGGER.info("("+modId+") "+"Getting value for: "+key+" (base: "+base+")");
+            BufferedReader configReader = new BufferedReader(new FileReader(configFile));
+            for (String s : Files.readAllLines(configFile.toPath())) {
+                if (s.contains("=") && !s.startsWith("//")) {
+                    String[] as = s.split("=");
+                    String name = as[0];
+                    double id;
+                    try {
+                        id = Double.parseDouble(as[1]);
+                    } catch (NumberFormatException e){
+                        continue;
+                    }
+                    if (id > 16384){
+                        id -= 16384 * (id % 16384);
+                    }
+                    if (name.equalsIgnoreCase(key)){
+                        SunsetUtils.LOGGER.info("("+modId+") "+"Value: "+id);
+                        return id;
+                    }
+                }
+            }
+            configReader.close();
+        } catch (Exception e) {
+            SunsetUtils.LOGGER.error("Failed to read "+key+" from config for "+modId+"!");
+            e.printStackTrace();
+        }
+        SunsetUtils.LOGGER.info("("+modId+") "+"No value defined, returning base: "+base);
+        return base;
+    }
+
+    public String getFromConfig(String key, String base){
+        try {
+            SunsetUtils.LOGGER.info("("+modId+") "+"Getting value for: "+key+" (base: "+base+")");
+            BufferedReader configReader = new BufferedReader(new FileReader(configFile));
+            for (String s : Files.readAllLines(configFile.toPath())) {
+                if (s.contains("=") && !s.startsWith("//")) {
+                    String[] as = s.split("=");
+                    String name = as[0];
+                    String id = as[1];
                     if (name.equalsIgnoreCase(key)){
                         SunsetUtils.LOGGER.info("("+modId+") "+"Value: "+id);
                         return id;
