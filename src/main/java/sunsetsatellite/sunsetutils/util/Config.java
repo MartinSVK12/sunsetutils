@@ -1,6 +1,6 @@
 package sunsetsatellite.sunsetutils.util;
 
-import net.minecraft.client.Minecraft;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.block.Block;
 import net.minecraft.core.item.Item;
 import sunsetsatellite.sunsetutils.SunsetUtils;
@@ -8,6 +8,7 @@ import sunsetsatellite.sunsetutils.SunsetUtils;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +19,8 @@ public class Config {
     public Map<String,String> props = new HashMap<>();
     private final File configFile;
     public Config(String modId, Map<String,String> props, Class<?>[] idClasses){
-        this.configFile = new File((Minecraft.getMinecraft(Minecraft.class).getMinecraftDir()) + "/config/" + modId + ".cfg");
+        Path mcDir = FabricLoader.getInstance().getConfigDir();
+        this.configFile = new File(mcDir + "/" + modId + ".cfg");
         this.modId = modId;
         this.idClasses = idClasses;
         this.props = props;
@@ -52,7 +54,8 @@ public class Config {
     }
 
     public Config(String modId, Map<String,String> props){
-        this.configFile = new File((Minecraft.getMinecraft(Minecraft.class).getMinecraftDir()) + "/config/" + modId + ".cfg");
+        Path mcDir = FabricLoader.getInstance().getConfigDir();
+        this.configFile = new File(mcDir + "/" + modId + ".cfg");
         this.modId = modId;
         this.props = props;
         if (!configFile.exists()) {
@@ -76,7 +79,8 @@ public class Config {
     }
 
     public Config(String modId, Class<?>[] idClasses) {
-        this.configFile = new File((Minecraft.getMinecraft(Minecraft.class).getMinecraftDir()) + "/config/" + modId + ".cfg");
+        Path mcDir = FabricLoader.getInstance().getConfigDir();
+        this.configFile = new File(mcDir + "/" + modId + ".cfg");
         this.modId = modId;
         this.idClasses = idClasses;
         if (!configFile.exists()) {
@@ -108,7 +112,8 @@ public class Config {
 
     private void writeConfig(){
         try {
-            new File(Minecraft.getMinecraft(Minecraft.class).getMinecraftDir() + "/config").mkdirs();
+            File mcDir = FabricLoader.getInstance().getConfigDir().toFile();
+            mcDir.mkdirs();
             BufferedWriter configWriter = new BufferedWriter(new FileWriter(configFile));
             configWriter.write("//"+modId+" configuration file. If a property is null or invalid a default value will be used. Configure options here:");
             for (Map.Entry<String, String> entry : props.entrySet()) {
