@@ -42,7 +42,7 @@ public enum Direction {
     }
 
     public Vec3i getVec() {
-        return vec;
+        return vec.copy();
     }
 
     public static Direction getDirectionFromSide(int side){
