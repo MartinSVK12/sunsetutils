@@ -1,5 +1,5 @@
 package sunsetsatellite.sunsetutils.util.models;
 
-public interface ICustomBlockModel {
+public interface ICustomModel {
     NBTModel getModel();
 }

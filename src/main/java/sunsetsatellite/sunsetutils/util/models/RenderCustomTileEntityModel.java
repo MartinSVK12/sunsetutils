@@ -9,11 +9,11 @@ import sunsetsatellite.sunsetutils.util.Direction;
 import sunsetsatellite.sunsetutils.util.Vec2f;
 import sunsetsatellite.sunsetutils.util.Vec3f;
 
-public class RenderCustomTileEntityModel extends TileEntityRenderer<TileEntity> {
+public class RenderCustomTileEntityModel<T extends TileEntity> extends TileEntityRenderer<T> {
     @Override
-    public void doRender(TileEntity tileEntity, double x, double y, double z, float g) {
-        if(tileEntity.getBlockType() != null && tileEntity.getBlockType() instanceof ICustomBlockModel){
-            render(x,y,z,tileEntity,((ICustomBlockModel) tileEntity.getBlockType()).getModel());
+    public void doRender(T tileEntity, double x, double y, double z, float g) {
+        if(tileEntity.getBlockType() != null && tileEntity.getBlockType() instanceof ICustomModel){
+            render(x,y,z,tileEntity,((ICustomModel) tileEntity.getBlockType()).getModel());
         }
     }
 
