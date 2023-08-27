@@ -158,9 +158,6 @@ public class Config {
                     } catch (NumberFormatException e){
                         continue;
                     }
-                    if (id > 16384){
-                        id -= 16384 * (id % 16384);
-                    }
                     if (name.equalsIgnoreCase(key)){
                         SunsetUtils.LOGGER.info("("+modId+") "+"Value: "+id);
                         return id;
@@ -189,9 +186,6 @@ public class Config {
                         id = Double.parseDouble(as[1]);
                     } catch (NumberFormatException e){
                         continue;
-                    }
-                    if (id > 16384){
-                        id -= 16384 * (id % 16384);
                     }
                     if (name.equalsIgnoreCase(key)){
                         SunsetUtils.LOGGER.info("("+modId+") "+"Value: "+id);
