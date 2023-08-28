@@ -19,7 +19,7 @@ public class NBTEditCommand extends Command {
             if(Objects.equals(args[0], "hand")){
                 if(Objects.equals(args[1],"copy")){
                     if(commandSender.getPlayer().inventory.getCurrentItem() != null){
-                        copy = commandSender.getPlayer().inventory.getCurrentItem().tag;
+                        copy = commandSender.getPlayer().inventory.getCurrentItem().getData();
                         commandSender.sendMessage("Copied!");
                         return true;
                     }
@@ -29,7 +29,7 @@ public class NBTEditCommand extends Command {
                         throw new CommandError("Copy some data first!");
                     }
                     if(commandSender.getPlayer().inventory.getCurrentItem() != null){
-                        commandSender.getPlayer().inventory.getCurrentItem().tag = copy;
+                        commandSender.getPlayer().inventory.getCurrentItem().setData(copy);
                         commandSender.sendMessage("Pasted!");
                         return true;
                     }
@@ -39,28 +39,28 @@ public class NBTEditCommand extends Command {
                         ItemStack stack = commandSender.getPlayer().inventory.getCurrentItem();
                         switch (args[2]){
                             case "integer":
-                                stack.tag.putInt(args[3],Integer.parseInt(args[4]));
+                                stack.getData().putInt(args[3],Integer.parseInt(args[4]));
                                 return true;
                             case "string":
-                                stack.tag.putString(args[3],args[4]);
+                                stack.getData().putString(args[3],args[4]);
                                 return true;
                             case "byte":
-                                stack.tag.putByte(args[3],Byte.parseByte(args[4]));
+                                stack.getData().putByte(args[3],Byte.parseByte(args[4]));
                                 return true;
                             case "bool":
-                                stack.tag.putBoolean(args[3],Boolean.parseBoolean(args[4]));
+                                stack.getData().putBoolean(args[3],Boolean.parseBoolean(args[4]));
                                 return true;
                             case "double":
-                                stack.tag.putDouble(args[3],Double.parseDouble(args[4]));
+                                stack.getData().putDouble(args[3],Double.parseDouble(args[4]));
                                 return true;
                             case "float":
-                                stack.tag.putDouble(args[3],Float.parseFloat(args[4]));
+                                stack.getData().putDouble(args[3],Float.parseFloat(args[4]));
                                 return true;
                             case "long":
-                                stack.tag.putDouble(args[3],Long.parseLong(args[4]));
+                                stack.getData().putDouble(args[3],Long.parseLong(args[4]));
                                 return true;
                             case "short":
-                                stack.tag.putDouble(args[3],Short.parseShort(args[4]));
+                                stack.getData().putDouble(args[3],Short.parseShort(args[4]));
                                 return true;
                         }
                     }
@@ -70,28 +70,28 @@ public class NBTEditCommand extends Command {
                         ItemStack stack = commandSender.getPlayer().inventory.getCurrentItem();
                         switch (args[2]) {
                             case "integer":
-                                commandSender.sendMessage(String.valueOf(stack.tag.getInteger(args[3])));
+                                commandSender.sendMessage(String.valueOf(stack.getData().getInteger(args[3])));
                                 return true;
                             case "string":
-                                commandSender.sendMessage(stack.tag.getString(args[3]));
+                                commandSender.sendMessage(stack.getData().getString(args[3]));
                                 return true;
                             case "byte":
-                                commandSender.sendMessage(String.valueOf(stack.tag.getByte(args[3])));
+                                commandSender.sendMessage(String.valueOf(stack.getData().getByte(args[3])));
                                 return true;
                             case "bool":
-                                commandSender.sendMessage(String.valueOf(stack.tag.getBoolean(args[3])));
+                                commandSender.sendMessage(String.valueOf(stack.getData().getBoolean(args[3])));
                                 return true;
                             case "double":
-                                commandSender.sendMessage(String.valueOf(stack.tag.getDouble(args[3])));
+                                commandSender.sendMessage(String.valueOf(stack.getData().getDouble(args[3])));
                                 return true;
                             case "float":
-                                commandSender.sendMessage(String.valueOf(stack.tag.getFloat(args[3])));
+                                commandSender.sendMessage(String.valueOf(stack.getData().getFloat(args[3])));
                                 return true;
                             case "long":
-                                commandSender.sendMessage(String.valueOf(stack.tag.getLong(args[3])));
+                                commandSender.sendMessage(String.valueOf(stack.getData().getLong(args[3])));
                                 return true;
                             case "short":
-                                commandSender.sendMessage(String.valueOf(stack.tag.getShort(args[3])));
+                                commandSender.sendMessage(String.valueOf(stack.getData().getShort(args[3])));
                                 return true;
                         }
                     }
