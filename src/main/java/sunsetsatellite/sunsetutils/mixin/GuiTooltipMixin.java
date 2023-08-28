@@ -25,7 +25,7 @@ public class GuiTooltipMixin extends Gui {
             at = @At(value = "INVOKE",target = "Lnet/minecraft/client/gui/GuiTooltip;formatDescription(Ljava/lang/String;I)Ljava/lang/String;", shift = At.Shift.AFTER),
             locals = LocalCapture.CAPTURE_FAILHARD
     )
-    public void injectCustomTooltip(ItemStack itemStack, boolean showDescription, Slot slot, CallbackInfoReturnable<String> cir, I18n trans, StringBuilder text, boolean discovered, boolean ctrlPressed, boolean shiftPressed, boolean debug, String itemName, String itemNickname) {
+    public void injectCustomTooltip(ItemStack itemStack, boolean showDescription, Slot slot, CallbackInfoReturnable<String> cir, I18n trans, StringBuilder text, boolean discovered, boolean ctrlPressed, boolean shiftPressed, boolean debug) {
         ItemStack stack = slot.getStack();
         if(stack != null && stack.getItem() instanceof ItemBlock){
             Block block = Block.blocksList[stack.getItem().id];
