@@ -63,6 +63,11 @@ public enum Direction {
         return null;
     }
 
+    public Direction rotate(int amount){
+        if(this == Y_POS || this == Y_NEG) return this;
+        return getDirectionFromSide(net.minecraft.core.util.helper.Direction.getDirectionById(this.side).rotate(amount).getId());
+    }
+
     /**
      * Gets minecraft's side number, NOTE: this and .ordinal() aren't the same!
      * @return Minecraft's side number.

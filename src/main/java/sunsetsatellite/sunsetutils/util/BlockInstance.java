@@ -2,6 +2,7 @@ package sunsetsatellite.sunsetutils.util;
 
 import net.minecraft.core.block.Block;
 import net.minecraft.core.block.entity.TileEntity;
+import net.minecraft.core.world.World;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -25,6 +26,19 @@ public class BlockInstance {
         this.pos = pos;
         this.tile = tile;
         this.meta = meta;
+    }
+
+    public boolean exists(World world){
+        Block block = world.getBlock(pos.x, pos.y, pos.z);
+        int meta = world.getBlockMetadata(pos.x, pos.y, pos.z);
+        return block == this.block && (meta == this.meta || this.meta == -1);
+    }
+
+    public boolean existsWithTile(World world){
+        Block block = world.getBlock(pos.x, pos.y, pos.z);
+        int meta = world.getBlockMetadata(pos.x, pos.y, pos.z);
+        TileEntity tile = world.getBlockTileEntity(pos.x, pos.y, pos.z);
+        return block == this.block && (meta == this.meta || this.meta == -1) && tile == this.tile;
     }
 
     @Override

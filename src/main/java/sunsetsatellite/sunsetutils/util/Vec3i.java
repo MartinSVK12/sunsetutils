@@ -22,6 +22,10 @@ public class Vec3i {
         this.x = this.y = this.z = size;
     }
 
+    public Vec3i(CompoundTag tag){
+        readFromNBT(tag);
+    }
+
 
     @Override
     public String toString() {
@@ -39,28 +43,28 @@ public class Vec3i {
         return MathHelper.sqrt_double(d * d + d1 * d1 + d2 * d2);
     }
 
-    public Vec3i add(double value){
+    public Vec3i add(int value){
         this.x += value;
         this.y += value;
         this.z += value;
         return this;
     }
 
-    public Vec3i subtract(double value){
+    public Vec3i subtract(int value){
         this.x -= value;
         this.y -= value;
         this.z -= value;
         return this;
     }
 
-    public Vec3i divide(double value){
+    public Vec3i divide(int value){
         this.x /= value;
         this.y /= value;
         this.z /= value;
         return this;
     }
 
-    public Vec3i multiply(double value){
+    public Vec3i multiply(int value){
         this.x *= value;
         this.y *= value;
         this.z *= value;

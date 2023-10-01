@@ -10,7 +10,10 @@ import sunsetsatellite.sunsetutils.util.BlockInstance;
 import sunsetsatellite.sunsetutils.util.Direction;
 import sunsetsatellite.sunsetutils.util.Vec3i;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -60,180 +63,228 @@ public class Structure {
         }
     }
 
-    //data.getCompound("Data").getValues()
-
     public boolean placeStructure(World world, int originX, int originY, int originZ){
-        for (Object o : data.getCompound("Data").getValues()) {
-            CompoundTag block = (CompoundTag) o;
-            if (!replaceBlocks && world.getBlockId(block.getInteger("x") + originX, block.getInteger("y") + originY, block.getInteger("z") + originZ) != 0) {
+        Vec3i origin = new Vec3i(originX,originY,originZ);
+        ArrayList<BlockInstance> blocks = getBlocks(origin);
+        blocks.add(getOrigin(origin));
+        for (BlockInstance block : blocks) {
+            if (!replaceBlocks && world.getBlockId(block.pos.x, block.pos.y, block.pos.z) != 0) {
                 return false;
             }
         }
-        for (Object o : data.getCompound("Data").getValues()) {
-            CompoundTag block = (CompoundTag) o;
-            int id = getBlockId(block);
-            if(id != 0 || placeAir){
-                world.setBlockAndMetadataWithNotify(block.getInteger("x")+originX,block.getInteger("y")+originY, block.getInteger("z")+originZ, id, block.getInteger("meta"));
-            }
+        for (BlockInstance block : blocks) {
+            world.setBlockAndMetadataWithNotify(block.pos.x,block.pos.y,block.pos.z,block.block.id,block.meta);
         }
         return true;
-    }
-
-    public static Structure saveStructureAroundOrigin(World world, Vec3i origin, Vec3i size, String filePath, boolean placeAir, boolean replaceBlocks){
-        if(size.x >= 0 && size.y >= 0 && size.z >= 0){
-            int n = 0;
-            CompoundTag data = new CompoundTag();
-            CompoundTag struct = new CompoundTag();
-            Structure structure = new Structure(SunsetUtils.MOD_ID,new Class<?>[]{},filePath,struct,placeAir,replaceBlocks);
-            structure.filePath = filePath;
-            for (int x = origin.x-size.x; x <= origin.x+size.x; x++) {
-                for (int y = origin.y-size.y; y <= origin.y+size.y; y++) {
-                    for (int z = origin.z-size.z; z <= origin.z+size.z; z++) {
-                        if(world.getBlockId(x,y,z) != 0 || placeAir){
-                            CompoundTag block = new CompoundTag();
-                            block.putInt("x",x-origin.x);
-                            block.putInt("y",y-origin.y);
-                            block.putInt("z",z-origin.z);
-                            String s = structure.getBlockFieldName(Block.getBlock(world.getBlockId(x,y,z)));
-                            if(!s.contains("Block.")){
-                                s = s.replace(".",":");
-                                block.putString("id",s);
-                            } else {
-                                block.putInt("id",world.getBlockId(x,y,z));
-                            }
-                            block.putInt("meta",world.getBlockMetadata(x,y,z));
-                            data.putCompound(String.valueOf(n),block);
-                            n++;
-                        }
-                    }
-                }
-            }
-            struct.putCompound("Data",data);
-            SunsetUtils.LOGGER.info(n+" blocks saved.");
-            return structure;
-        } else {
-            SunsetUtils.LOGGER.error("Invalid parameters!");
-            return null;
-        }
-    }
-
-    public static Structure saveStructure(World world, ArrayList<BlockInstance> blocks, String filePath, boolean placeAir, boolean replaceBlocks){
-        CompoundTag struct = new CompoundTag();
-        CompoundTag data = new CompoundTag();
-        Structure structure = new Structure(SunsetUtils.MOD_ID,new Class<?>[]{},filePath,struct,placeAir,replaceBlocks);
-        structure.filePath = filePath;
-        int n = 0;
-        for (BlockInstance blockInstance : blocks) {
-            CompoundTag block = new CompoundTag();
-            block.putInt("x",blockInstance.pos.x);
-            block.putInt("y",blockInstance.pos.y);
-            block.putInt("z",blockInstance.pos.z);
-            String s = structure.getBlockFieldName(blockInstance.block);
-            if(s.isEmpty()){
-                block.putInt("id",blockInstance.block.id);
-            } else if(!s.contains("Block.")){
-                s = s.replace(".",":");
-                block.putString("id",s);
-            } else {
-                block.putInt("id",blockInstance.block.id);
-            }
-            block.putInt("meta",blockInstance.meta);
-            data.putCompound(String.valueOf(n),block);
-            n++;
-        }
-        struct.putCompound("Data",data);
-        SunsetUtils.LOGGER.info(n+" blocks saved.");
-        return structure;
-    }
-
-    public static Structure saveStructure(World world, Vec3i pos1, Vec3i pos2, String filePath, boolean placeAir, boolean replaceBlocks){
-        CompoundTag struct = new CompoundTag();
-        CompoundTag data = new CompoundTag();
-        Structure structure = new Structure(SunsetUtils.MOD_ID,new Class<?>[]{},filePath,struct,placeAir,replaceBlocks);
-        structure.filePath = filePath;
-        Vec3i diff = new Vec3i(pos1.x-pos2.x,pos1.y-pos2.y,pos1.z-pos2.z);
-        int n = 0;
-        SunsetUtils.LOGGER.info(diff.toString());
-        if(pos1.x < pos2.x){
-            int temp = pos1.x;
-            pos1.x = pos2.x;
-            pos2.x = temp;
-        }
-        if(pos1.y < pos2.y){
-            int temp = pos1.y;
-            pos1.y = pos2.y;
-            pos2.y = temp;
-        }
-        if(pos1.z < pos2.z){
-            int temp = pos1.z;
-            pos1.z = pos2.z;
-            pos2.z = temp;
-        }
-        int i = 0,j = 0,k = 0;
-        for (int x = pos2.x; x <= pos1.x; x++) {
-            for(int y = pos2.y; y <= pos1.y; y++){
-                for(int z = pos2.z; z <= pos1.z; z++){
-                    if(world.getBlockId(x,y,z) != 0 || placeAir){
-                        i = x - pos1.x;
-                        j = y - pos1.y;
-                        k = z - pos1.z;
-                        CompoundTag block = new CompoundTag();
-                        block.putInt("x",i);
-                        block.putInt("y",j);
-                        block.putInt("z",k);
-                        String s = structure.getBlockFieldName(Block.getBlock(world.getBlockId(x,y,z)));
-                        if(s.isEmpty()){
-                            block.putInt("id",world.getBlockId(x,y,z));
-                        } else if(!s.contains("Block.")){
-                            s = s.replace(".",":");
-                            block.putString("id",s);
-                        } else {
-                            block.putInt("id",world.getBlockId(x,y,z));
-                        }
-                        block.putInt("meta",world.getBlockMetadata(x,y,z));
-                        data.putCompound(String.valueOf(n),block);
-                        n++;
-                    }
-                }
-            }
-        }
-        struct.putCompound("Data",data);
-        SunsetUtils.LOGGER.info(n+" blocks saved.");
-        return structure;
     }
 
     public boolean placeStructure(World world, int originX, int originY, int originZ, String direction){
-
-        for (Object o : data.getCompound("Data").getValues()) {
-            Vec3i pos;
-            CompoundTag block = (CompoundTag) o;
-            Direction dir = Direction.getFromName(direction);
-            if (dir != null) {
-                pos = new Vec3i(block.getInteger("x"),block.getInteger("y"),block.getInteger("z")).rotate(new Vec3i(originX,originY,originZ),dir);
-            } else {
-                return false;
-            }
-            
-            if (!replaceBlocks && world.getBlockId(pos.x, pos.y, pos.z) != 0) {
+        Direction dir = Direction.getFromName(direction);
+        if(dir == null) return false;
+        Vec3i origin = new Vec3i(originX,originY,originZ);
+        ArrayList<BlockInstance> blocks = getBlocks(origin,dir);
+        blocks.add(getOrigin(origin));
+        for (BlockInstance block : blocks) {
+            if (!replaceBlocks && world.getBlockId(block.pos.x, block.pos.y, block.pos.z) != 0) {
                 return false;
             }
         }
-        for (Object o : data.getCompound("Data").getValues()) {
-            Vec3i pos;
-            Direction dir = Direction.getFromName(direction);
-            CompoundTag block = (CompoundTag) o;
-            if (dir != null) {
-                pos = new Vec3i(block.getInteger("x"),block.getInteger("y"),block.getInteger("z")).rotate(new Vec3i(originX,originY,originZ),dir);
-            } else {
-                return false;
-            }
-            
-            int id = getBlockId(block);
-            if(id != 0 || placeAir){
-                world.setBlockAndMetadataWithNotify(pos.x, pos.y, pos.z, id, block.getInteger("meta"));
-            }
+        for (BlockInstance block : blocks) {
+            world.setBlockAndMetadataWithNotify(block.pos.x,block.pos.y,block.pos.z,block.block.id,block.meta);
         }
         return true;
+    }
+
+    public BlockInstance getOrigin(){
+        CompoundTag blockTag = data.getCompound("Origin");
+        int meta = blockTag.getInteger("meta");
+        int id = getBlockId(blockTag);
+        Block block = Block.getBlock(id);
+        return new BlockInstance(block, new Vec3i(),meta,null);
+    }
+
+    public BlockInstance getOrigin(Vec3i origin){
+        CompoundTag blockTag = data.getCompound("Origin");
+        int meta = blockTag.getInteger("meta");
+        int id = getBlockId(blockTag);
+        Block block = Block.getBlock(id);
+        return new BlockInstance(block, origin,meta,null);
+    }
+
+    public BlockInstance getOrigin(World world, Vec3i origin){
+        CompoundTag blockTag = data.getCompound("Origin");
+        Vec3i pos = new Vec3i(blockTag.getCompound("pos"));
+        int meta = blockTag.getInteger("meta");
+        int id = getBlockId(blockTag);
+        Block block = Block.getBlock(id);
+        return new BlockInstance(block,pos,meta,world.getBlockTileEntity(pos.x, pos.y, pos.z));
+    }
+
+    public ArrayList<BlockInstance> getTileEntities(){
+        ArrayList<BlockInstance> tiles = new ArrayList<>();
+        for (Tag<?> tag : data.getCompound("TileEntities").getValues()) {
+            CompoundTag tileEntity = (CompoundTag) tag;
+            Vec3i pos = new Vec3i(tileEntity.getCompound("pos"));
+            int meta = tileEntity.getInteger("meta");
+            int id = getBlockId(tileEntity);
+            Block block = Block.getBlock(id);
+            BlockInstance blockInstance = new BlockInstance(block,pos,meta,null);
+            tiles.add(blockInstance);
+        }
+        return tiles;
+    }
+
+    public ArrayList<BlockInstance> getTileEntities(Vec3i origin){
+        ArrayList<BlockInstance> tiles = new ArrayList<>();
+        for (Tag<?> tag : data.getCompound("TileEntities").getValues()) {
+            CompoundTag tileEntity = (CompoundTag) tag;
+            Vec3i pos = new Vec3i(tileEntity.getCompound("pos")).add(origin);
+            int meta = tileEntity.getInteger("meta");
+            int id = getBlockId(tileEntity);
+            Block block = Block.getBlock(id);
+            BlockInstance blockInstance = new BlockInstance(block,pos,meta,null);
+            tiles.add(blockInstance);
+        }
+        return tiles;
+    }
+
+    public ArrayList<BlockInstance> getTileEntities(World world, Vec3i origin){
+        ArrayList<BlockInstance> tiles = new ArrayList<>();
+        for (Tag<?> tag : data.getCompound("TileEntities").getValues()) {
+            CompoundTag tileEntity = (CompoundTag) tag;
+            Vec3i pos = new Vec3i(tileEntity.getCompound("pos")).add(origin);
+            int meta = tileEntity.getInteger("meta");
+            int id = getBlockId(tileEntity);
+            Block block = Block.getBlock(id);
+            BlockInstance blockInstance = new BlockInstance(block,pos,meta,world.getBlockTileEntity(pos.x, pos.y, pos.z));
+            tiles.add(blockInstance);
+        }
+        return tiles;
+    }
+
+    public ArrayList<BlockInstance> getTileEntities(World world, Vec3i origin, Direction dir){
+        ArrayList<BlockInstance> tiles = new ArrayList<>();
+        for (Tag<?> tag : data.getCompound("Blocks").getValues()) {
+            CompoundTag blockTag = (CompoundTag) tag;
+            Vec3i pos = new Vec3i(blockTag.getCompound("pos")).rotate(origin,dir);
+            int meta = blockTag.getInteger("meta");
+            if(meta != -1){
+                if(dir == Direction.Z_NEG){
+                    meta = Direction.getDirectionFromSide(meta).getOpposite().getSide();
+                } else if (dir == Direction.X_NEG || dir == Direction.X_POS) {
+                    Direction blockDir = Direction.getDirectionFromSide(meta);
+                    blockDir = blockDir == Direction.X_NEG || blockDir == Direction.X_POS ? blockDir.rotate(1).getOpposite() : blockDir.rotate(1);
+                    meta = dir == Direction.X_NEG ? blockDir.getSide() : blockDir.getOpposite().getSide();
+                }
+            }
+            int id = getBlockId(blockTag);
+            Block block = Block.getBlock(id);
+            BlockInstance blockInstance = new BlockInstance(block,pos,meta,world.getBlockTileEntity(pos.x, pos.y, pos.z));
+            tiles.add(blockInstance);
+        }
+        return tiles;
+    }
+
+    public ArrayList<BlockInstance> getBlocks(){
+        ArrayList<BlockInstance> tiles = new ArrayList<>();
+        for (Tag<?> tag : data.getCompound("Blocks").getValues()) {
+            CompoundTag blockTag = (CompoundTag) tag;
+            Vec3i pos = new Vec3i(blockTag.getCompound("pos"));
+            int meta = blockTag.getInteger("meta");
+            int id = getBlockId(blockTag);
+            Block block = Block.getBlock(id);
+            BlockInstance blockInstance = new BlockInstance(block,pos,meta,null);
+            tiles.add(blockInstance);
+        }
+        return tiles;
+    }
+
+    public ArrayList<BlockInstance> getBlocks(Vec3i origin){
+        ArrayList<BlockInstance> tiles = new ArrayList<>();
+        for (Tag<?> tag : data.getCompound("Blocks").getValues()) {
+            CompoundTag blockTag = (CompoundTag) tag;
+            Vec3i pos = new Vec3i(blockTag.getCompound("pos")).add(origin);
+            int meta = blockTag.getInteger("meta");
+            int id = getBlockId(blockTag);
+            Block block = Block.getBlock(id);
+            BlockInstance blockInstance = new BlockInstance(block,pos,meta,null);
+            tiles.add(blockInstance);
+        }
+        return tiles;
+    }
+
+    public ArrayList<BlockInstance> getBlocks(Vec3i origin, Direction dir){
+        ArrayList<BlockInstance> tiles = new ArrayList<>();
+        for (Tag<?> tag : data.getCompound("Blocks").getValues()) {
+            CompoundTag blockTag = (CompoundTag) tag;
+            Vec3i pos = new Vec3i(blockTag.getCompound("pos")).rotate(origin,dir);
+            int meta = blockTag.getInteger("meta");
+            if(meta != -1){
+                if(dir == Direction.Z_NEG){
+                    meta = Direction.getDirectionFromSide(meta).getOpposite().getSide();
+                } else if (dir == Direction.X_NEG || dir == Direction.X_POS) {
+                    Direction blockDir = Direction.getDirectionFromSide(meta);
+                    blockDir = blockDir == Direction.X_NEG || blockDir == Direction.X_POS ? blockDir.rotate(1).getOpposite() : blockDir.rotate(1);
+                    meta = dir == Direction.X_NEG ? blockDir.getSide() : blockDir.getOpposite().getSide();
+                }
+            }
+            int id = getBlockId(blockTag);
+            Block block = Block.getBlock(id);
+            BlockInstance blockInstance = new BlockInstance(block,pos,meta,null);
+            tiles.add(blockInstance);
+        }
+        return tiles;
+    }
+
+    public ArrayList<BlockInstance> getSubstitutions(){
+        ArrayList<BlockInstance> tiles = new ArrayList<>();
+        for (Tag<?> tag : data.getCompound("Substitutions").getValues()) {
+            CompoundTag sub = (CompoundTag) tag;
+            Vec3i pos = new Vec3i(sub.getCompound("pos"));
+            int meta = sub.getInteger("meta");
+            int id = getBlockId(sub);
+            Block block = Block.getBlock(id);
+            BlockInstance blockInstance = new BlockInstance(block,pos,meta,null);
+            tiles.add(blockInstance);
+        }
+        return tiles;
+    }
+
+    public ArrayList<BlockInstance> getSubstitutions(Vec3i origin){
+        ArrayList<BlockInstance> tiles = new ArrayList<>();
+        for (Tag<?> tag : data.getCompound("Substitutions").getValues()) {
+            CompoundTag sub = (CompoundTag) tag;
+            Vec3i pos = new Vec3i(sub.getCompound("pos")).add(origin);
+            int meta = sub.getInteger("meta");
+            int id = getBlockId(sub);
+            Block block = Block.getBlock(id);
+            BlockInstance blockInstance = new BlockInstance(block,pos,meta,null);
+            tiles.add(blockInstance);
+        }
+        return tiles;
+    }
+
+    public ArrayList<BlockInstance> getSubstitutions(Vec3i origin, Direction dir){
+        ArrayList<BlockInstance> tiles = new ArrayList<>();
+        for (Tag<?> tag : data.getCompound("Substitutions").getValues()) {
+            CompoundTag tileEntity = (CompoundTag) tag;
+            Vec3i pos = new Vec3i(tileEntity.getCompound("pos")).rotate(origin, dir);
+            int meta = tileEntity.getInteger("meta");
+            if(meta != -1){
+                if(dir == Direction.Z_NEG){
+                    meta = Direction.getDirectionFromSide(meta).getOpposite().getSide();
+                } else if (dir == Direction.X_NEG || dir == Direction.X_POS) {
+                    Direction blockDir = Direction.getDirectionFromSide(meta);
+                    blockDir = blockDir == Direction.X_NEG || blockDir == Direction.X_POS ? blockDir.rotate(1).getOpposite() : blockDir.rotate(1);
+                    meta = dir == Direction.X_NEG ? blockDir.getSide() : blockDir.getOpposite().getSide();
+                }
+            }
+            int id = getBlockId(tileEntity);
+            Block block = Block.getBlock(id);
+            BlockInstance blockInstance = new BlockInstance(block,pos,meta,null);
+            tiles.add(blockInstance);
+        }
+        return tiles;
     }
 
     public static int getBlockId(CompoundTag block){
@@ -260,7 +311,7 @@ public class Structure {
         try (InputStream resource = this.getClass().getResourceAsStream("/assets/" + modId + "/structures/" + name + ".nbt")) {
             if (resource != null) {
                 this.data = NbtIo.readCompressed(resource);
-                SunsetUtils.LOGGER.info(String.format("Structure '%s' contains %d blocks.",name,this.data.getCompound("Data").getValues().size()));
+                SunsetUtils.LOGGER.info(String.format("Structure '%s' contains %d blocks.",name,this.data.getCompound("Blocks").getValues().size()));
             }
         } catch (IOException e) {
             e.printStackTrace();
