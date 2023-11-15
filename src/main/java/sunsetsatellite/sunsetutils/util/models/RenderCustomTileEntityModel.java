@@ -19,6 +19,7 @@ public class RenderCustomTileEntityModel<T extends TileEntity> extends TileEntit
 
     public static boolean render(double x, double y, double z, TileEntity tileEntity, NBTModel model){
         GL11.glPushMatrix();
+        GL11.glDisable(GL11.GL_LIGHTING);
         if(model.rotatable){
             Direction dir = Direction.getDirectionFromSide(tileEntity.worldObj.getBlockMetadata(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord));
             Vec3f rot = Direction.getDirectionFromSide(tileEntity.worldObj.getBlockMetadata(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord)).getVecF();
@@ -51,14 +52,13 @@ public class RenderCustomTileEntityModel<T extends TileEntity> extends TileEntit
             if(!(model.rotatable)){
                 GL11.glTranslated(x,y,z);
             }
+            GL11.glTranslatef(0.5f,0,0.5f);
 
             GL11.glRotated(angle,surface.rotation.x,surface.rotation.y,surface.rotation.z);
 
             for (int index : surface.indices) {
                 String texture = model.textures[surface.texture];
                 Minecraft.getMinecraft(Minecraft.class).renderEngine.bindTexture(Minecraft.getMinecraft(Minecraft.class).renderEngine.getTexture(texture));
-                float brightness = 1;//block.getBlockBrightness(Minecraft.getMinecraft(Minecraft.class).theWorld,x,y,z);
-                tessellator.setColorOpaque_F(1 * brightness,1 * brightness,1 * brightness);
                 Vec3f vertex = surface.vertices[index];
                 Vec2f uv = surface.uvs[index].copy();
                 Vec3f normals = surface.normals[index];
@@ -69,6 +69,7 @@ public class RenderCustomTileEntityModel<T extends TileEntity> extends TileEntit
             GL11.glEnable(GL11.GL_CULL_FACE);
             GL11.glPopMatrix();
         }
+        GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glPopMatrix();
         return true;
     }

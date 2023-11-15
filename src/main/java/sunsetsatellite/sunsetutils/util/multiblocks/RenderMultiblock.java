@@ -24,20 +24,20 @@ public class RenderMultiblock extends TileEntityRenderer<TileEntity> {
         World world = this.renderDispatcher.renderEngine.minecraft.theWorld;
         if(tileEntity instanceof IMultiblock){
             Multiblock multiblock = ((IMultiblock) tileEntity).getMultiblock();
-            ArrayList<BlockInstance> blocks = multiblock.getBlocks(new Vec3i(i, j, k),dir);
-            ArrayList<BlockInstance> substitutions = multiblock.getSubstitutions(new Vec3i(i, j, k),dir);
+            ArrayList<BlockInstance> blocks = multiblock.getBlocks(new Vec3i(i, j, k),Direction.Z_POS); //TODO: multiblocks need to be made in the Z+ direction currently and that's stupid
+            ArrayList<BlockInstance> substitutions = multiblock.getSubstitutions(new Vec3i(i, j, k),Direction.Z_POS);
             for (BlockInstance block : blocks) {
                 if(!block.exists(world)){
                     boolean foundSub = substitutions.stream().anyMatch((BI)-> BI.pos.equals(block.pos) && BI.exists(world));
                     if(!foundSub){
                         GL11.glPushMatrix();
                         GL11.glDisable(GL11.GL_LIGHTING);
-                        GL11.glColor4f(0.25f,0.25f,0.25f,1.0f);
+                        GL11.glColor4f(1f,0f,0f,1.0f);
                         GL11.glTranslatef((float)d+(block.pos.x-i), (float)e+(block.pos.y-j), (float)f+(block.pos.z-k));
                         drawBlock(this.getFontRenderer(),
                                 this.renderDispatcher.renderEngine,
                                 block.block.id,
-                                block.meta,
+                                block.meta == -1 ? 0 : block.meta,
                                 i,
                                 j,
                                 k,
